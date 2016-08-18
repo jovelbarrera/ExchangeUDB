@@ -1,258 +1,216 @@
-﻿using System;
+﻿using Exchange.Interfaces;
+using Kadevjo.Core.Dependencies;
+using Kadevjo.Core.Models;
+using Kadevjo.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Exchange.Configs;
-using Exchange.Interfaces;
-using Firebase.Xamarin.Database;
-using Firebase.Xamarin.Database.Query;
 
 namespace Exchange.Services.FirebaseServices
 {
-	public abstract class FirebaseDatabaseService<T> where T : IModel, new()
-	{
-		private FirebaseClient _firebaseClient;
-		protected abstract string BaseResourcePath { get; }
-		protected abstract string Token { get; }
-		protected abstract IFirebaseAccess FirebaseAccess { get;}
+    public abstract class FirebaseDatabaseService<S, T> : FlurlService<S, T>
+        where S : IService<T>
+        where T : Model, IModel, new()
+    {
+        protected abstract string Token { get; }
 
-		public FirebaseDatabaseService()
-		{
-			_firebaseClient = new FirebaseClient(FirebaseAccess.FirebaseBasePath);
-		}
+        #region CRUD methods
 
+        #region Read Methods
 
-		#region private methods
+        protected async Task<T> ReadSingle(string objectId)
+        {
+            return await ReadSingle<T>(objectId, Resource);
+        }
 
-		private ChildQuery BaseChildQuery(string childResource)
-		{
-			return _firebaseClient.Child(FullResourcePath(childResource));
-		}
+        protected async Task<I> ReadSingle<I>(string objectId, string childResource)
+            where I : IModel, new()
+        {
+            if (string.IsNullOrEmpty(objectId))
+                return new I();
 
-		private OrderQuery BaseFilterQuery(string childResource)
-		{
-			return BaseChildQuery(childResource).OrderByKey();
-		}
+            string resource = string.Format("{0}/{1}.json?auth={2}", childResource, objectId, Token);
+            I result = await Execute<I>(resource);
+            if (result == null)
+                return new I();
+            result.ObjectId = objectId;
+            return result;
+        }
 
-		private async Task<List<I>> Once<I>(FilterQuery baseFilterQuery)
-			where I : IModel
-		{
-			IReadOnlyCollection<FirebaseObject<I>> results;
-			if (!string.IsNullOrEmpty(Token))
-				results = await baseFilterQuery.WithAuth(Token).OnceAsync<I>();
-			else
-				results = await baseFilterQuery.OnceAsync<I>();
+        protected async Task<List<I>> Read<I>(string childResource, Dictionary<string, object> parameters)
+            where I : IModel
+        {
+            string parametersString = string.Empty;
+            foreach (var parameter in parameters)
+            {
+                parametersString += string.Format("&{0}={1}", parameter.Key, parameter.Value);
+            }
+            string resource = string.Format("{0}.json?auth={1}{2}", childResource, Token, parametersString);
+            Dictionary<string, I> results = await Execute<Dictionary<string, I>>(resource);
+            if (results == null)
+                return new List<I>();
+            foreach (var result in results)
+                result.Value.ObjectId = result.Key;
 
-			return ConvertToModelList(results);
-		}
+            List<I> items = results.Values.ToList();
+            return items;
+        }
 
-		private async Task<I> OnceSingle<I>(ChildQuery baseChildQuery)
-		{
-			I result;
-			if (!string.IsNullOrEmpty(Token))
-				result = await baseChildQuery.WithAuth(Token).OnceSingleAsync<I>();
-			else
-				result = await baseChildQuery.OnceSingleAsync<I>();
+        #endregion
 
-			return result;
-		}
+        #region Create Methods
 
-		private async Task<FirebaseObject<I>> Post<I>(ChildQuery baseFilterQuery, I model)
-			where I : IModel
-		{
-			FirebaseObject<I> result = default(FirebaseObject<I>);
+        protected async Task<string> Create(T model)
+        {
+            return await Create<T>(model, Resource);
+        }
 
-			if (!string.IsNullOrEmpty(Token))
-				result = await baseFilterQuery.WithAuth(Token).PostAsync(model, false);
-			else
-				result = await baseFilterQuery.PostAsync(model, false);
-			return result;
-		}
+        protected async Task<string> Create<I>(I model, string childResource)
+            where I : IModel
+        {
+            if (model.Equals(null))
+                return null;
 
-		private async Task Put<I>(ChildQuery baseFilterQuery, I model)
-		{
-			if (!string.IsNullOrEmpty(Token))
-				await baseFilterQuery.WithAuth(Token).PutAsync(model);
-			else
-				await baseFilterQuery.PutAsync(model);
-		}
+            DateTime currentTime = await TimeService.Instance.Now();
+            model.CreatedAt = currentTime;
+            model.UpdatedAt = currentTime;
 
-		private async Task Delete(ChildQuery baseFilterQuery)
-		{
-			if (!string.IsNullOrEmpty(Token))
-				await baseFilterQuery.WithAuth(Token).DeleteAsync();
-			else
-				await baseFilterQuery.DeleteAsync();
-		}
+            string resource = string.Format("{0}.json?auth={1}", childResource, Token);
+            GenericResponse<Dictionary<string, string>> result = await Execute<Dictionary<string, string>, I>(resource, HttpMethod.Post, model);
+            if (result != null && result.Model != null && result.Model.ContainsKey("name"))
+                return result.Model["name"];
+            return null;
+        }
 
-		private List<I> ConvertToModelList<I>(IReadOnlyCollection<FirebaseObject<I>> results)
-			where I : IModel
-		{
-			var list = new List<I>();
-			foreach (var result in results)
-			{
-				result.Object.ObjectId = result.Key;
-				list.Add(result.Object);
-			}
-			return list;
-		}
+        #endregion
 
-		private string FullResourcePath(string childResource)
-		{
-			string fullResourcePath = BaseResourcePath;
-			if (!string.IsNullOrEmpty(childResource))
-				fullResourcePath += childResource.StartsWith("/") ? childResource : "/" + childResource;
-			return fullResourcePath;
-		}
+        #region Update Methods
 
-		#endregion
+        protected async Task<bool> Update(T model)
+        {
+            return await Update<T>(model, Resource);
+        }
 
-		#region CRUD methods
+        protected async Task<bool> Update<I>(I model, string childResource)
+            where I : IModel, new()
+        {
+            if (model.Equals(null) || string.IsNullOrEmpty(model.ObjectId))
+                return false;
 
-		#region Read Methods
+            I registeredModel = await ReadSingle<I>(model.ObjectId, childResource);
 
-		protected async Task<T> ReadSingle(string objectId, string childResource = null)
-		{
-			return await ReadSingle<T>(objectId, childResource);
-		}
+            if (registeredModel.Equals(null))
+                return false;
 
-		protected async Task<I> ReadSingle<I>(string objectId, string childResource)
-			where I : IModel, new()
-		{
-			if (string.IsNullOrEmpty(objectId))
-				return new I();
+            DateTime currentTime = await TimeService.Instance.Now();
+            model.CreatedAt = registeredModel.CreatedAt;
+            model.UpdatedAt = currentTime;
 
-			ChildQuery childQuery = BaseChildQuery(childResource).Child(objectId);
-			return await OnceSingle<I>(childQuery);
-		}
+            string resource = string.Format("{0}/{1}.json?auth={2}", childResource, model.ObjectId, Token);
+            GenericResponse<I> result = await Execute<I, I>(resource, new HttpMethod("PATCH"), model);
+            if (result != null && result.Model != null)
+                return true;
+            return false;
+        }
 
-		protected async Task<List<T>> ReadLimitToFirst(int limit, string childResource = null)
-		{
-			return await ReadLimitToFirst<T>(limit, childResource);
-		}
+        #endregion
 
-		protected async Task<List<I>> ReadLimitToFirst<I>(int limit, string childResource)
-			where I : IModel
-		{
-			FilterQuery baseFilterQuery = BaseFilterQuery(childResource).LimitToFirst(limit);
-			return await Once<I>(baseFilterQuery);
-		}
+        #region Delete Methods
 
-		protected async Task<List<T>> ReadLimitToLast(int limit, string childResource = null)
-		{
-			return await ReadLimitToLast<T>(limit, childResource);
-		}
+        protected async Task<bool> Delete(T model)
+        {
+            return await Delete<T>(model, Resource);
+        }
 
-		protected async Task<List<I>> ReadLimitToLast<I>(int limit, string childResource)
-			where I : IModel
-		{
-			FilterQuery baseFilterQuery = BaseFilterQuery(childResource).LimitToLast(limit);
-			return await Once<I>(baseFilterQuery);
-		}
+        protected async Task<bool> Delete<I>(I model, string childResource)
+            where I : IModel
+        {
+            if (model.Equals(null) || string.IsNullOrEmpty(model.ObjectId))
+                return false;
 
-		protected async Task<List<T>> ReadPrev(int limit, string endAtId, string childResource = null)
-		{
-			return await ReadPrev<T>(limit, endAtId, childResource);
-		}
+            string resource = string.Format("{0}/{1}.json?auth={2}", childResource, model.ObjectId, Token);
+            GenericResponse<object> result = await Execute<object, I>(resource, HttpMethod.Delete);
+            if (result.Status == System.Net.HttpStatusCode.OK)
+                return true;
+            return false;
+        }
 
-		protected async Task<List<I>> ReadPrev<I>(int limit, string endAtId, string childResource)
-			where I : IModel
-		{
-			OrderQuery baseFilterQuery = BaseFilterQuery(childResource);
-			return await Once<I>(baseFilterQuery.EndAt(endAtId).LimitToLast(limit));
-		}
+        #endregion
 
-		protected async Task<List<T>> ReadNext(int limit, string startAtId, string childResource = null)
-		{
-			return await ReadNext<T>(limit, startAtId, childResource);
-		}
+        #region Custom Methods
 
-		protected async Task<List<I>> ReadNext<I>(int limit, string startAtId, string childResource)
-			where I : IModel
-		{
-			OrderQuery baseFilterQuery = BaseFilterQuery(childResource);
-			return await Once<I>(baseFilterQuery.StartAt(startAtId).LimitToFirst(limit));
-		}
+        protected async Task<List<T>> ReadLimitToFirst(int limit)
+        {
+            return await ReadLimitToFirst<T>(limit, Resource);
+        }
 
-		#endregion
+        protected async Task<List<I>> ReadLimitToFirst<I>(int limit, string childResource)
+            where I : IModel
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "orderBy",@"""$key""" },
+                { "limitToFirst" , limit }
+            };
 
-		#region Create Methods
+            return await Read<I>(childResource, parameters);
+        }
 
-		protected async Task<string> Create(T model, string childResource = null)
-		{
-			return await Create<T>(model, childResource);
-		}
+        protected async Task<List<T>> ReadLimitToLast(int limit)
+        {
+            return await ReadLimitToLast<T>(limit, Resource);
+        }
 
-		protected async Task<string> Create<I>(I model, string childResource)
-			where I : IModel
-		{
-			if (model.Equals(null))
-				return null;
+        protected async Task<List<I>> ReadLimitToLast<I>(int limit, string childResource)
+            where I : IModel
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "orderBy",@"""$key""" },
+                { "limitToLast" , limit }
+            };
 
-			DateTime currentTime = await TimeService.Instance.Now();
-			model.CreatedAt = currentTime;
-			model.UpdatedAt = currentTime;
+            return await Read<I>(childResource, parameters);
+        }
 
-			ChildQuery childQuery = BaseChildQuery(childResource);
-			FirebaseObject<I> result = await Post(childQuery, model);
+        protected async Task<List<T>> ReadPrev(int limit, string endAtId)
+        {
+            return await ReadPrev<T>(limit, endAtId, Resource);
+        }
 
-			return result.Key;
-		}
+        protected async Task<List<I>> ReadPrev<I>(int limit, string endAtId, string childResource)
+            where I : IModel
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "orderBy",@"""$key""" },
+                { "limitToFirst" , limit },
+                { "EndAt" , endAtId }
+            };
+            return await Read<I>(childResource, parameters);
+        }
 
-		#endregion
+        protected async Task<List<T>> ReadNext(int limit, string startAtId)
+        {
+            return await ReadNext<T>(limit, startAtId, Resource);
+        }
 
-		#region Update Methods
+        protected async Task<List<I>> ReadNext<I>(int limit, string startAtId, string childResource)
+            where I : IModel
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "orderBy",@"""$key""" },
+                { "limitToFirst" , limit },
+                { "StartAt" , startAtId }
+            };
+            return await Read<I>(childResource, parameters);
+        }
 
-		protected async Task<bool> Update(T model, string childResource = null)
-		{
-			return await Update<T>(model, childResource);
-		}
+        #endregion
 
-		protected async Task<bool> Update<I>(I model, string childResource)
-			where I : IModel, new()
-		{
-			if (model.Equals(null) || string.IsNullOrEmpty(model.ObjectId))
-				return false;
-
-			I registeredModel = await ReadSingle<I>(model.ObjectId, childResource);
-
-			if (registeredModel.Equals(null))
-				return false;
-
-			DateTime currentTime = await TimeService.Instance.Now();
-			model.CreatedAt = registeredModel.CreatedAt;
-			model.UpdatedAt = currentTime;
-
-			ChildQuery childQuery = BaseChildQuery(childResource).Child(model.ObjectId);
-			await Put(childQuery, model);
-
-			return true;
-		}
-
-		#endregion
-
-		#region Delete Methods
-
-		protected async Task<bool> Delete(T model, string childResource = null)
-		{
-			return await Delete<T>(model, childResource);
-		}
-
-		protected async Task<bool> Delete<I>(I model, string childResource)
-			where I : IModel
-		{
-			if (model.Equals(null) || string.IsNullOrEmpty(model.ObjectId))
-				return false;
-
-			ChildQuery childQuery = BaseChildQuery(childResource).Child(model.ObjectId);
-			await Delete(childQuery);
-
-			return true;
-		}
-
-		#endregion
-
-		#endregion
-	}
+        #endregion
+    }
 }

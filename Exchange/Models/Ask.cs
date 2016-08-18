@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Exchange.Models
 {
-	public class Ask : IModel
+	public class Ask : Kadevjo.Core.Models.Model, IModel
 	{
 		public string ObjectId { get; set; }
 		public DateTimeOffset CreatedAt { get; set; }

@@ -26,7 +26,7 @@ namespace Exchange.Droid
 
 			CallbackManager = CallbackManagerFactory.Create();
 			Instance = this;
-			LoadApplication(new App());
+            LoadApplication(new App());
 		}
 
 		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -30,6 +30,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Configs\FirebaseAccess.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pages\LoginPage.cs" />
@@ -84,7 +85,6 @@
     <Compile Include="Pages\ActivityPage.UI.cs" />
     <Compile Include="Pages\ViewsCell\ActivityViewCell.cs" />
     <Compile Include="Models\Activity.cs" />
-    <Compile Include="Configs\FirebaseAccess.cs" />
     <Compile Include="Services\AskService.cs" />
     <Compile Include="Interfaces\IModel.cs" />
     <Compile Include="Dependencies\Facebook\FacebookEvent.cs" />
@@ -92,8 +92,17 @@
     <Compile Include="Dependencies\Facebook\IFacebookButton.cs" />
     <Compile Include="Dependencies\IRealService.cs" />
     <Compile Include="Services\FirebaseServices\FirebaseAuthService.cs" />
+    <Compile Include="Services\FirebaseServices\FirebaseDatabaseService.Old.cs" />
     <Compile Include="Services\FirebaseServices\FirebaseDatabaseService.cs" />
     <Compile Include="Services\FirebaseServices\IFirebaseAuthServiceCallback.cs" />
+    <Compile Include="Services\Framework\CacheableAttribute.cs" />
+    <Compile Include="Services\Framework\FlurlService.cs" />
+    <Compile Include="Services\Framework\GenericResponse.cs" />
+    <Compile Include="Services\Framework\ICache.cs" />
+    <Compile Include="Services\Framework\IQuery.cs" />
+    <Compile Include="Services\Framework\IService.cs" />
+    <Compile Include="Services\Framework\Model.cs" />
+    <Compile Include="Services\Framework\RestService.cs" />
     <Compile Include="Services\UserManager.cs" />
     <Compile Include="Services\RealmServices\RealmService.cs" />
     <Compile Include="Configs\Utils.cs" />
@@ -109,6 +118,26 @@
     <Compile Include="Pages\BaseDetailPage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Flurl, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.2.0.0\lib\portable-net40+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Flurl.Http, Version=0.10.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Flurl.Http.0.10.1\lib\portable-net45+win+wpa81+wp80\Flurl.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Plugin.Connectivity">
       <HintPath>..\packages\Xam.Plugin.Connectivity.2.2.2\lib\portable-net45+wp80+wp81+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+Xamarin.Mac20+UAP10\Plugin.Connectivity.dll</HintPath>
     </Reference>
@@ -154,9 +183,6 @@
     <Reference Include="crypto">
       <HintPath>..\packages\Firebase.Xamarin.0.3.6\lib\crypto.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Firebase.Xamarin.0.3.6\lib\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Reactive.Core">
       <HintPath>..\packages\Firebase.Xamarin.0.3.6\lib\System.Reactive.Core.dll</HintPath>
     </Reference>
@@ -183,24 +209,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\" />
-    <Folder Include="Configs\" />
-    <Folder Include="Pages\ViewsCell\" />
-    <Folder Include="Pages\UIHelper\" />
-    <Folder Include="Models\" />
-    <Folder Include="Dependencies\" />
-    <Folder Include="Controls\" />
-    <Folder Include="Pages\ContentViews\" />
-    <Folder Include="Services\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Dependencies\Facebook\" />
-    <Folder Include="Services\FirebaseServices\" />
-    <Folder Include="Services\RealmServices\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Import Project="..\packages\Fody.1.29.4\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\portable-net+sl+win+wpa+wp\Fody.targets')" />

@@ -25,9 +25,9 @@ namespace Exchange.Pages
 		#endregion
 
 		protected override void Init()
-		{
-			base.Init();
-			Comments = new ObservableCollection<Comment>();
+        {
+            Comments = new ObservableCollection<Comment>();
+            base.Init();
 		}
 
 		protected override async Task LoadData(string id)
@@ -39,13 +39,13 @@ namespace Exchange.Pages
 			if (Model.User != null)
 				_subtitleLabel.Text = Model.User.DisplayName + "\n" + Model.CreatedAt.HumanDate();
 			_descriptionLabel.Text = Model.Description;
-			LoadReplies();
+			await LoadReplies();
 		}
 
 		private async Task LoadReplies()
 		{
 			_repliesLayout.Children.Insert(0, Loading);
-			List<Comment> comments = await AskService.Instance.GetComments(Model);
+			List<Comment> comments = await AskService.Instance.GetReplies(Model);
 			if (comments != null)
 				foreach (var comment in comments)
 					Comments.Add(comment);

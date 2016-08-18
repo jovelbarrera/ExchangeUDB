@@ -4,8 +4,8 @@ using Realms;
 
 namespace Exchange.Models
 {
-	public class User : IUser
-	{
+	public class User : Kadevjo.Core.Models.Model, IUser // Shouldn't inherit Model
+    {
 		#region IModel implementation
 		public string ObjectId { get; set; }
 		public DateTimeOffset CreatedAt { get; set; }
