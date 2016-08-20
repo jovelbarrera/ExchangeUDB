@@ -39,5 +39,5 @@ Thumbs.db
 #dotCover
 *.dotCover
 
-Exchange/Configs/FirebaseAccess.cs
-Droid/Resources/values/strings.xml
+#Exchange/Configs/FirebaseAccess.cs
+#Droid/Resources/values/strings.xml

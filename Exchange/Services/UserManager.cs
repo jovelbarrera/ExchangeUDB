@@ -39,21 +39,42 @@ namespace Exchange.Services
             return user;
         }
 
-        public async Task<IUser> SetCurrentUser(IUser newuser)
+        public async Task SetCurrentUser(IUser newuser)
+        {
+           
+            IUser user = await GetCurrentUser();
+
+            CurrentUser cu = TransformToCurentUser(newuser);
+            if (user == null)
+            {
+                await RealmService<CurrentUser>.Instance.InsertObject(cu);
+            }
+            else
+            {
+                await RealmService<CurrentUser>.Instance.UpdateObject(cu);
+            }
+        }
+
+        private CurrentUser TransformToCurentUser(IUser user)
         {
             PropertyInfo[] modelProperties = typeof(IModel).GetRuntimeProperties().ToArray();
             PropertyInfo[] userProperties = typeof(IUser).GetRuntimeProperties().ToArray();
             PropertyInfo[] properties = modelProperties.Concat(userProperties).ToArray();
-            IUser user = await GetCurrentUser();
-            if (user == null)
+
+            var currentUser = new CurrentUser();
+            foreach (var property in properties)
             {
-                await RealmService<CurrentUser>.Instance.InsertObject((CurrentUser)user);
+                try
+                {
+                    object val = user.GetType().GetRuntimeProperty(property.Name).GetValue(user);
+                    currentUser.GetType().GetRuntimeProperty(property.Name).SetValue(currentUser, val);
+                }
+                catch (Exception ex)
+                {
+                    var a = ex.Message;
+                }
             }
-            else
-            {
-                await RealmService<CurrentUser>.Instance.UpdateObject((CurrentUser)user);
-            }
-            return user;
+            return currentUser;
         }
 
         public async Task SignUpWithCredentials(string email, string password, Action<bool> continueWith)
