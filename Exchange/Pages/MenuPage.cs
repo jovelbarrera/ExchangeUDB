@@ -21,7 +21,7 @@ namespace Exchange.Pages
 
 		private async Task LoadData()
 		{
-			IUser user = UserManager.Instance.CurrentUser;
+			IUser user = await UserManager.Instance.GetCurrentUser();
 			if (user != null)
 			{
 				if (!string.IsNullOrEmpty(user.ProfilePicture))

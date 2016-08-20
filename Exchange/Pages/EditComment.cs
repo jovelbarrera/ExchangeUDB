@@ -28,7 +28,7 @@ namespace Exchange.Pages
 		{
 			Init(onComplete, comment);
 			InitializeComponents();
-			LoadData();
+			LoadData().ConfigureAwait(false);
 		}
 
 		private void Init(Action<Comment> onComplete, Comment comment)
@@ -36,12 +36,12 @@ namespace Exchange.Pages
 			_isNewComment = comment == null;
 			_comment = comment ?? new Comment();
 			OnComplete = onComplete;
-			_currentUser = UserManager.Instance.CurrentUser;
 		}
 
-		private void LoadData()
-		{
-			if (!string.IsNullOrEmpty(_currentUser.ProfilePicture))
+		private async Task LoadData()
+        {
+            _currentUser = await UserManager.Instance.GetCurrentUser();
+            if (!string.IsNullOrEmpty(_currentUser.ProfilePicture))
 				_pictureImage.Source = _currentUser.ProfilePicture;
 
 			if (!_isNewComment)

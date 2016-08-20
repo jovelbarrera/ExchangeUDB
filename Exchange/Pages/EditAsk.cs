@@ -26,17 +26,17 @@ namespace Exchange.Pages
 
 		public EditAsk(Ask ask = null)
 		{
-			Init(ask);
+			Init(ask).ConfigureAwait(false);
 			InitializeComponents();
 			LoadData();
 		}
 
-		private void Init(Ask ask)
+		private async Task Init(Ask ask)
 		{
 			_isNewAsk = ask == null;
 			_ask = ask ?? new Ask();
 			_tags = new List<string>();
-			_currentUser = UserManager.Instance.CurrentUser;
+			_currentUser = await UserManager.Instance.GetCurrentUser();
 		}
 
 		private void LoadData()

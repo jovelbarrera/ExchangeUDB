@@ -27,7 +27,7 @@ namespace Kadevjo.Core.Services
         }
 
         private bool isCacheable = false;
-        private ICache cacheManager;
+        private ICache<T> cacheManager; // Using new ICache Interface
 
         public RestService()
         {
@@ -68,13 +68,13 @@ namespace Kadevjo.Core.Services
             {
                 if (!CrossConnectivity.Current.IsConnected)
                 {
-                    var response = await cacheManager.GetObject<T>(id);
+                    var response = await cacheManager.GetObject(id);
                     return response;
                 }
                 else
                 {
                     var response = await Execute<T>(resource);
-                    cacheManager.InsertObject<T>(response);
+                    await cacheManager.InsertObject(response);
                     return response;
                 }
             }
@@ -93,13 +93,13 @@ namespace Kadevjo.Core.Services
             {
                 if (!CrossConnectivity.Current.IsConnected)
                 {
-                    var response = await cacheManager.GetObjects<T>();
+                    var response = await cacheManager.GetObjects();
                     return response;
                 }
                 else
                 {
                     var response = await Execute<List<T>>(Resource);
-                    cacheManager.InsertObjects<T>(response);
+                    await cacheManager.InsertObjects(response);
                     return response;
                 }
             }
@@ -115,13 +115,13 @@ namespace Kadevjo.Core.Services
             {
                 if (!CrossConnectivity.Current.IsConnected)
                 {
-                    var response = await cacheManager.GetObjects<T>();
+                    var response = await cacheManager.GetObjects();
                     return response;
                 }
                 else
                 {
                     var response = await Execute<List<T>>(Resource, query);
-                    cacheManager.InsertObjects<T>(response);
+                    await cacheManager.InsertObjects(response);
                     return response;
                 }
             }
