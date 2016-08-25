@@ -10,56 +10,56 @@ using System;
 
 namespace Kadevjo.Core.Services
 {
-    public abstract class FlurlService<I, T> : RestService<I, T>
-        where I : IService<T>
-        where T : Model
-    {
-        private FlurlClient client;
+	public abstract class FlurlService<I, T> : RestService<I, T>
+		where I : IService<T>
+		where T : Model
+	{
+		private FlurlClient client;
 
-        public FlurlService()
-        {
-            client = new FlurlClient();
-            if (Headers != null && Headers.Count > 0)
-            {
-                foreach (var header in Headers)
-                {
-                    client = client.WithHeader(header.Key, header.Value);
-                }
-            }
-        }
+		public FlurlService()
+		{
+			client = new FlurlClient();
+			if (Headers != null && Headers.Count > 0)
+			{
+				foreach (var header in Headers)
+				{
+					client = client.WithHeader(header.Key, header.Value);
+				}
+			}
+		}
 
-        protected async override Task<R> Execute<R>(string resource, IQuery query = null)
-        {
-            var url = BaseUrl.AppendPathSegment(resource);
+		protected async override Task<R> Execute<R>(string resource, IQuery query = null)
+		{
+			var url = BaseUrl.AppendPathSegment(resource);
 
-            if (query != null && query.FormattedParameters != null && query.Parameters.Count > 0)
-            {
-                foreach (var param in query.FormattedParameters)
-                {
-                    url.SetQueryParam(param.Key, param.Value);
-                }
-            }
+			if (query != null && query.FormattedParameters != null && query.Parameters.Count > 0)
+			{
+				foreach (var param in query.FormattedParameters)
+				{
+					url.SetQueryParam(param.Key, param.Value);
+				}
+			}
 
-            try
-            {
-                var response = await url.WithClient(client)
-                                        .GetAsync()
-                                        .ReceiveJson<R>();
-                return response;
-            }
-            catch (FlurlHttpException e)
-            {
-                Debug.WriteLine("Request failed: " + e.Call.Request);
-                Debug.WriteLine(e.Message);
-            }
-            catch (Exception ex)
-            {
-                var a = ex;
-            }
-            return default(R);
-        }
+			try
+			{
+				var response = await url.WithClient(client)
+										.GetAsync()
+										.ReceiveJson<R>();
+				return response;
+			}
+			catch (FlurlHttpException e)
+			{
+				Debug.WriteLine("Request failed: " + e.Call.Request);
+				Debug.WriteLine(e.Message);
+			}
+			catch (Exception ex)
+			{
+				var a = ex;
+			}
+			return default(R);
+		}
 
-        protected async override Task<bool> Execute<B>(
+		protected async override Task<bool> Execute<B>(
             string resource, HttpMethod method, B body = default(B))
         {
             var url = BaseUrl.AppendPathSegment(resource);
@@ -108,7 +108,7 @@ namespace Kadevjo.Core.Services
 
         }
 
-        protected async override Task<GenericResponse<R>> Execute<R, B>(
+		protected async override Task<GenericResponse<R>> Execute<R, B>(
             string resource, HttpMethod method, B body = default(B))
         {
 
@@ -161,37 +161,35 @@ namespace Kadevjo.Core.Services
                     }
                 }
 
-                var preResponse = await task.ReceiveJson<R>();
+                R preResponse = await task.ReceiveJson<R>();
                 var response = new GenericResponse<R>
                 {
                     Model = preResponse,
-                    Status = System.Net.HttpStatusCode.OK,
-                    Message = "Ok"
+					Status = task.Result,
                 };
                 return response;
             }
             catch (FlurlHttpException e)
             {
-                Debug.WriteLine("Request failed: " + e.Call.Request
-                                + " " + e.Call.RequestBody);
-                Debug.WriteLine(e.Message);
-                Debug.WriteLine(e.GetResponseString());
+                //Debug.WriteLine("Request failed: " + e.Call.Request
+                //                + " " + e.Call.RequestBody);
+                //Debug.WriteLine(e.Message);
+                //Debug.WriteLine(e.GetResponseString());
 
-                Encoding iso = Encoding.GetEncoding("ISO-8859-1");
-                Encoding utf16 = Encoding.Unicode;
-                byte[] utfBytes = utf16.GetBytes(e.GetResponseString());
-                byte[] isoBytes = Encoding.Convert(utf16, iso, utfBytes);
-                string message = iso.GetString(isoBytes, 0, isoBytes.Length - 1);
+                //Encoding iso = Encoding.GetEncoding("ISO-8859-1");
+                //Encoding utf16 = Encoding.Unicode;
+                //byte[] utfBytes = utf16.GetBytes(e.GetResponseString());
+                //byte[] isoBytes = Encoding.Convert(utf16, iso, utfBytes);
+                //string message = iso.GetString(isoBytes, 0, isoBytes.Length - 1);
 
 
                 var response = new GenericResponse<R>
                 {
                     Model = default(R),
-                    Status = e.Call.Response.StatusCode,
-                    Message = e.GetResponseString()
+                    Status = e.Call.Response,
                 };
                 return response;
             }
         }
-    }
+	}
 }

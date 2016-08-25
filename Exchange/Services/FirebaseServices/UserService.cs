@@ -6,6 +6,7 @@ using Exchange.Configs;
 using Exchange.Helpers;
 using Exchange.Models;
 using Exchange.Services.FirebaseServices;
+using Kadevjo.Core.Models;
 
 namespace Exchange.Services.FirebaseServices
 {
@@ -24,17 +25,17 @@ namespace Exchange.Services.FirebaseServices
             DateTime currentTime = await TimeService.Instance.Now();
             try
             {
-                var registeredUser = await ReadSingle(user.ObjectId);
+                var registeredUser = await Read(user.ObjectId);
                 user.UpdatedAt = currentTime;
                 if (registeredUser == null)
                 {
                     user.CreatedAt = currentTime;
-                    await base.Create(user);
+					GenericResponse<Dictionary<string, string>> response = await base.Create<Dictionary<string, string>>(user);
                 }
                 else
                 {
                     user.CreatedAt = registeredUser.CreatedAt;
-                    await base.Update(user);
+					GenericResponse<Dictionary<string, string>> response = await base.Update<Dictionary<string, string>>(user);
                 }
             }
             catch (HttpRequestException ex)
@@ -54,7 +55,7 @@ namespace Exchange.Services.FirebaseServices
 
         public async Task<User> Get(string objectId)
         {
-            return await ReadSingle(objectId);
+            return await Read(objectId);
         }
     }
 }
