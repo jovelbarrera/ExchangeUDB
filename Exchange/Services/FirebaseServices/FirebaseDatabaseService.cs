@@ -40,8 +40,10 @@ namespace Exchange.Services.FirebaseServices
 			if (string.IsNullOrEmpty(objectId))
 				return new I();
 
-			string resource = string.Format("{0}/{1}.json?auth={2}", childResource, objectId, Token);
-			I result = await Execute<I>(resource);
+			var query = new FirebaseQuery();
+			query.Auth(Token);
+			string resource = string.Format("{0}/{1}.json", childResource, objectId, Token);
+			I result = await Execute<I>(resource, query);
 			if (result == null)
 				return new I();
 			result.ObjectId = objectId;

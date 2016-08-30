@@ -12,7 +12,7 @@ namespace Exchange.Services.FirebaseServices
 
 		public Dictionary<string, object> Parameters { get { return parameters; } }
 
-		public Dictionary<string, object> FormattedParameters { get { return Rebuild(parameters); } }
+		public Dictionary<string, object> FormattedParameters { get { return Parameters; } }
 
 		public FirebaseQuery()
 		{
@@ -143,33 +143,5 @@ namespace Exchange.Services.FirebaseServices
 			Add("limitToLast", value);
 			return this;
 		}
-
-		private Dictionary<string, object> Rebuild(Dictionary<string, object> dict)
-		{
-			var rebuilt = new Dictionary<string, object>();
-
-			foreach (var kvp in dict)
-			{
-				object value = null;
-
-				if (kvp.Value is List<object>)
-				{
-					var list = kvp.Value as List<object>;
-					value = string.Join(",", list.ToArray());
-				}
-				else if (kvp.Value is Dictionary<string, object>)
-				{
-					value = Rebuild(kvp.Value as Dictionary<string, object>);
-				}
-				else {
-					value = kvp.Value;
-				}
-
-				rebuilt.Add(kvp.Key, value);
-			}
-
-			return rebuilt;
-		}
-
 	}
 }

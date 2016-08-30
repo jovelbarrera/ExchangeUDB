@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using BranchXamarinSDK;
 using Xamarin.Facebook;
 
 namespace Exchange.Droid
@@ -26,7 +27,12 @@ namespace Exchange.Droid
 
 			CallbackManager = CallbackManagerFactory.Create();
 			Instance = this;
-            LoadApplication(new App());
+
+			var app = new App();
+
+			BranchAndroid.Init(this, "key_test_fhqjhUDb0PnWR0j87e1Q9kifBBjk0cMf", app);
+
+            LoadApplication(app);
 		}
 
 		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)

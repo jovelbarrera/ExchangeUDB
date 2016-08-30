@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Linq;
-using Exchange.Dependencies;
-using Exchange.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using BranchXamarinSDK;
+using Exchange.Interfaces;
 using Exchange.Pages;
 using Exchange.Services;
-using Realms;
 using Xamarin.Forms;
-using System.Threading.Tasks;
-using Exchange.Interfaces;
 
 namespace Exchange
 {
-    public class App : Application
+	public class App : Application, IBranchSessionInterface
     {
         public App()
         {
@@ -42,6 +40,20 @@ namespace Exchange
         {
             // Handle when your app resumes
         }
-    }
+
+		#region IBranchSessionInterface implementation
+
+		public void InitSessionComplete(Dictionary<string, object> data)
+		{
+			// Do something with the referring link data...
+		}
+
+		public void SessionRequestError(BranchError error)
+		{
+			// Handle the error case here
+		}
+
+		#endregion
+	}
 }
 

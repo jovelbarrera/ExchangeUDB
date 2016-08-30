@@ -27,6 +27,7 @@ namespace Exchange.Droid
 		public static void UpdateIdValues()
 		{
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::Exchange.Droid.Resource.Attribute.actionBarSize;
+			global::BranchXamarinSDK.Droid.Resource.String.library_name = global::Exchange.Droid.Resource.String.library_name;
 		}
 		
 		public partial class Animation
@@ -3405,11 +3406,11 @@ namespace Exchange.Droid
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f060039
-			public const int ApplicationName = 2131099705;
+			// aapt resource value: 0x7f06003a
+			public const int ApplicationName = 2131099706;
 			
-			// aapt resource value: 0x7f060038
-			public const int FacebookClientId = 2131099704;
+			// aapt resource value: 0x7f060039
+			public const int FacebookClientId = 2131099705;
 			
 			// aapt resource value: 0x7f060012
 			public const int abc_action_bar_home_description = 2131099666;
@@ -3477,59 +3478,62 @@ namespace Exchange.Droid
 			// aapt resource value: 0x7f060011
 			public const int character_counter_pattern = 2131099665;
 			
-			// aapt resource value: 0x7f060026
-			public const int com_facebook_device_auth_instructions = 2131099686;
-			
 			// aapt resource value: 0x7f060027
-			public const int com_facebook_image_download_unknown_error = 2131099687;
+			public const int com_facebook_device_auth_instructions = 2131099687;
 			
 			// aapt resource value: 0x7f060028
-			public const int com_facebook_internet_permission_error_message = 2131099688;
+			public const int com_facebook_image_download_unknown_error = 2131099688;
 			
 			// aapt resource value: 0x7f060029
-			public const int com_facebook_internet_permission_error_title = 2131099689;
+			public const int com_facebook_internet_permission_error_message = 2131099689;
 			
 			// aapt resource value: 0x7f06002a
-			public const int com_facebook_like_button_liked = 2131099690;
+			public const int com_facebook_internet_permission_error_title = 2131099690;
 			
 			// aapt resource value: 0x7f06002b
-			public const int com_facebook_like_button_not_liked = 2131099691;
+			public const int com_facebook_like_button_liked = 2131099691;
 			
 			// aapt resource value: 0x7f06002c
-			public const int com_facebook_loading = 2131099692;
+			public const int com_facebook_like_button_not_liked = 2131099692;
 			
 			// aapt resource value: 0x7f06002d
-			public const int com_facebook_loginview_cancel_action = 2131099693;
+			public const int com_facebook_loading = 2131099693;
 			
 			// aapt resource value: 0x7f06002e
-			public const int com_facebook_loginview_log_in_button = 2131099694;
+			public const int com_facebook_loginview_cancel_action = 2131099694;
 			
 			// aapt resource value: 0x7f06002f
-			public const int com_facebook_loginview_log_in_button_long = 2131099695;
+			public const int com_facebook_loginview_log_in_button = 2131099695;
 			
 			// aapt resource value: 0x7f060030
-			public const int com_facebook_loginview_log_out_action = 2131099696;
+			public const int com_facebook_loginview_log_in_button_long = 2131099696;
 			
 			// aapt resource value: 0x7f060031
-			public const int com_facebook_loginview_log_out_button = 2131099697;
+			public const int com_facebook_loginview_log_out_action = 2131099697;
 			
 			// aapt resource value: 0x7f060032
-			public const int com_facebook_loginview_logged_in_as = 2131099698;
+			public const int com_facebook_loginview_log_out_button = 2131099698;
 			
 			// aapt resource value: 0x7f060033
-			public const int com_facebook_loginview_logged_in_using_facebook = 2131099699;
+			public const int com_facebook_loginview_logged_in_as = 2131099699;
 			
 			// aapt resource value: 0x7f060034
-			public const int com_facebook_send_button_text = 2131099700;
+			public const int com_facebook_loginview_logged_in_using_facebook = 2131099700;
 			
 			// aapt resource value: 0x7f060035
-			public const int com_facebook_share_button_text = 2131099701;
+			public const int com_facebook_send_button_text = 2131099701;
 			
 			// aapt resource value: 0x7f060036
-			public const int com_facebook_tooltip_default = 2131099702;
+			public const int com_facebook_share_button_text = 2131099702;
 			
 			// aapt resource value: 0x7f060037
-			public const int messenger_send_button_text = 2131099703;
+			public const int com_facebook_tooltip_default = 2131099703;
+			
+			// aapt resource value: 0x7f060026
+			public const int library_name = 2131099686;
+			
+			// aapt resource value: 0x7f060038
+			public const int messenger_send_button_text = 2131099704;
 			
 			// aapt resource value: 0x7f060000
 			public const int mr_button_content_description = 2131099648;

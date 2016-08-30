@@ -17,6 +17,11 @@ namespace Exchange.Pages
 		protected abstract void InitializeComponents();
 		protected abstract Task<T> RetriveDataById(string id);
 
+		public BaseDetailPage()
+		{
+			Init();
+		}
+
 		public BaseDetailPage(string id)
 		{
 			Init();
