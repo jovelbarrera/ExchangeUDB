@@ -87,14 +87,10 @@
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Services\AskService.cs" />
     <Compile Include="Interfaces\IModel.cs" />
-    <Compile Include="Dependencies\Facebook\FacebookEvent.cs" />
-    <Compile Include="Dependencies\Facebook\IFacebook.cs" />
+    <Compile Include="Dependencies\Facebook\FacebookToken.cs" />
     <Compile Include="Dependencies\Facebook\IFacebookButton.cs" />
     <Compile Include="Dependencies\IRealService.cs" />
-    <Compile Include="Services\FirebaseServices\FirebaseAuthService.cs" />
-    <Compile Include="Services\FirebaseServices\FirebaseDatabaseService.Old.cs" />
     <Compile Include="Services\FirebaseServices\FirebaseDatabaseService.cs" />
-    <Compile Include="Services\FirebaseServices\IFirebaseAuthServiceCallback.cs" />
     <Compile Include="Services\Framework\CacheableAttribute.cs" />
     <Compile Include="Services\Framework\FlurlService.cs" />
     <Compile Include="Services\Framework\GenericResponse.cs" />
@@ -103,19 +99,17 @@
     <Compile Include="Services\Framework\IService.cs" />
     <Compile Include="Services\Framework\Model.cs" />
     <Compile Include="Services\Framework\RestService.cs" />
-    <Compile Include="Services\UserManager.cs" />
     <Compile Include="Services\RealmServices\RealmService.cs" />
     <Compile Include="Configs\Utils.cs" />
     <Compile Include="Helpers\Settings.cs" />
-    <Compile Include="Models\CurrentUser.cs" />
+    <Compile Include="Models\PersistentUser.cs" />
     <Compile Include="Interfaces\IUser.cs" />
-    <Compile Include="Services\FirebaseServices\UserService.cs" />
+    <Compile Include="Services\FirebaseServices\FirebaseUserService.cs" />
     <Compile Include="Services\TimeService.cs" />
     <Compile Include="Pages\EditComment.cs" />
     <Compile Include="Pages\EditComment.UI.cs" />
     <Compile Include="Services\RequestHandler.cs" />
     <Compile Include="Services\FirebaseServices\IFirebaseAccess.cs" />
-    <Compile Include="Pages\BaseDetailPage.cs" />
     <Compile Include="Services\FirebaseServices\FirebaseQuery.cs" />
     <Compile Include="Services\BranchService\BranchService.cs" />
     <Compile Include="Services\BranchService\IDeepLinkMetadata.cs" />
@@ -123,6 +117,21 @@
     <Compile Include="Services\BranchService\DeepLinkService.cs" />
     <Compile Include="Services\BranchService\IDeepLinkPage.cs" />
     <Compile Include="Services\BranchService\DeepLinkMetadata.cs" />
+    <Compile Include="Interfaces\IUserManager.cs" />
+    <Compile Include="Services\FirebaseServices\FirebaseAuthProvider.cs" />
+    <Compile Include="Interfaces\IAuthProvider.cs" />
+    <Compile Include="Services\AuthService\AuthProvider.cs" />
+    <Compile Include="Services\AuthService\UserManager.cs" />
+    <Compile Include="Services\CustomUserManager.cs" />
+    <Compile Include="Pages\EmailLoginPage.cs" />
+    <Compile Include="Pages\EmailLoginPage.UI.cs" />
+    <Compile Include="Pages\SignupPage.cs" />
+    <Compile Include="Pages\SignupPage.UI.cs" />
+    <Compile Include="Pages\Base\BaseDetailPage.cs" />
+    <Compile Include="Pages\Base\BasePage.cs" />
+    <Compile Include="Exceptions\NoInternetException.cs" />
+    <Compile Include="Services\FirebaseServices\FirebaseRefreshTokenService.cs" />
+    <Compile Include="Services\FirebaseServices\FirebaseToken.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Flurl, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -228,6 +237,9 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="Services\BranchService\" />
+    <Folder Include="Services\AuthService\" />
+    <Folder Include="Pages\Base\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />

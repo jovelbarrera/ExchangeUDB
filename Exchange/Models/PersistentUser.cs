@@ -5,7 +5,7 @@ using Realms;
 
 namespace Exchange.Models
 {
-	public class User : Kadevjo.Core.Models.Model, IUser // Shouldn't inherit Model
+	public class PersistentUser : RealmObject, IUser
 	{
 		#region IModel implementation
 		public string ObjectId { get; set; }
@@ -20,15 +20,16 @@ namespace Exchange.Models
 		public string LastName { get; set; }
 		public string Email { get; set; }
 		public string ProfilePicture { get; set; }
+		[Ignored]
 		public Dictionary<string, object> Data { get; set; }
 		#endregion
 
-		public User()
+		public PersistentUser()
 		{
 			Data = new Dictionary<string, object>();
 		}
 
-		public User(IUser user)
+		public PersistentUser(IUser user)
 		{
 			if (user == null)
 				return;
@@ -42,13 +43,6 @@ namespace Exchange.Models
 			Email = user.Email;
 			ProfilePicture = user.ProfilePicture;
 			Data = user.Data;
-		}
-
-		public object GetData(string key)
-		{
-			if (Data != null && Data.ContainsKey(key))
-				return Data[key];
-			return null;
 		}
 	}
 }

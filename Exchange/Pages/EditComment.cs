@@ -40,7 +40,7 @@ namespace Exchange.Pages
 
 		private async Task LoadData()
         {
-            _currentUser = await UserManager.Instance.GetCurrentUser();
+            _currentUser = await CustomUserManager.Instance.GetCurrentUser();
             if (!string.IsNullOrEmpty(_currentUser.ProfilePicture))
 				_pictureImage.Source = _currentUser.ProfilePicture;
 

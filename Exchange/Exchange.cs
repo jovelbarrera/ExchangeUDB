@@ -10,36 +10,35 @@ using Xamarin.Forms;
 namespace Exchange
 {
 	public class App : Application, IBranchSessionInterface
-    {
-        public App()
-        {
-            MainPage = new LoginPage();
-            //InitializeApp().ConfigureAwait(false);
-        }
+	{
+		public App()
+		{
+			InitializeApp().ConfigureAwait(false);
+		}
 
-        private async Task InitializeApp()
-        {
-            IUser currentUser = await UserManager.Instance.GetCurrentUser();
-            if (currentUser == null)
-                MainPage = new LoginPage();
-            else
-                MainPage = new MainPage();
-        }
+		private async Task InitializeApp()
+		{
+			IUser currentUser = await CustomUserManager.Instance.GetCurrentUser();
+			if (currentUser == null)
+				MainPage = new NavigationPage(new LoginPage());
+			else
+				MainPage = new MainPage();
+		}
 
-        protected override void OnStart()
-        {
-            // Handle when your app starts
-        }
+		protected override void OnStart()
+		{
+			// Handle when your app starts
+		}
 
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
+		protected override void OnSleep()
+		{
+			// Handle when your app sleeps
+		}
 
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
-        }
+		protected override void OnResume()
+		{
+			// Handle when your app resumes
+		}
 
 		#region IBranchSessionInterface implementation
 

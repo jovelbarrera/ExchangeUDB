@@ -1,6 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Exchange.ContentViews;
 using Exchange.Models;
+using Exchange.Services;
+using Exchange.Services.FirebaseServices;
+using Kadevjo.Core.Models;
 using Plugin.Connectivity;
 using Xamarin.Forms;
 
@@ -32,17 +37,45 @@ namespace Exchange.Pages
 			{
 				if (!string.IsNullOrEmpty(_user.ProfilePicture))
 					_pictureImage.Source = _user.ProfilePicture;
-				_nameLabel.Text = _user.DisplayName;
-				_emailLabel.Text = _user.Email;
-				_universityLabel.Text = _user.University;
-				_careerLabel.Text = _user.Career;
-				_aboutMeLabel.Text = _user.About;
+				_nameEntry.Text = _user.DisplayName;
+				_emailEntry.Text = _user.Email;
+				_universityEntry.Text = (string)_user.GetData("University");
+				_careerEntry.Text = (string)_user.GetData("Career");
+				_aboutMeEditor.Text = (string)_user.GetData("About");
 
 				Content = _mainLayout;
 			}
 			else
 			{
 				Content = new EmptyContent();
+			}
+		}
+
+		private async void DoneToolbarItem_Clicked(object sender, EventArgs e)
+		{
+			var user = new PersistentUser
+			{
+				ObjectId = _user.ObjectId,
+				Username = _nameEntry.Text,
+				DisplayName = _nameEntry.Text,
+				FirstName = _nameEntry.Text,
+				LastName = _nameEntry.Text,
+				Email = _emailEntry.Text,
+				ProfilePicture = _user.ProfilePicture,
+				Data = new Dictionary<string, object>
+				{
+					{"University",_universityEntry.Text},
+					{"About",_aboutMeEditor.Text}
+				},
+			};
+			try
+			{
+				await CustomUserManager.Instance.UpdateCurrentUser(user);
+				await DisplayAlert("Perfil actualizado", "Tu perfil ahora está actualizado", "ACEPTAR");
+			}
+			catch (Exception ex)
+			{
+				await DisplayAlert("Oops", "Ocurrió un problema al tratar de actualizar tu perfil, por favor intenta de nuevo.", "ACEPTAR");
 			}
 		}
 	}

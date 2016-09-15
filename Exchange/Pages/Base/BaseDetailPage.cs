@@ -5,16 +5,12 @@ using Exchange.Interfaces;
 using Plugin.Connectivity;
 using Xamarin.Forms;
 
-namespace Exchange.Pages
+namespace Exchange.Pages.Base
 {
-	public abstract class BaseDetailPage<T> : ContentPage where T : IModel, new()
+	public abstract class BaseDetailPage<T> : BasePage where T : IModel, new()
 	{
-		protected readonly LoadingContent Loading = new LoadingContent();
-		protected readonly NotFoundContent NotFound = new NotFoundContent();
-
 		protected T Model { get; set; }
 
-		protected abstract void InitializeComponents();
 		protected abstract Task<T> RetriveDataById(string id);
 
 		public BaseDetailPage()
@@ -38,7 +34,6 @@ namespace Exchange.Pages
 		protected virtual void Init()
 		{
 			Model = new T();
-			InitializeComponents();
 		}
 
 		protected virtual async Task LoadData(string id)

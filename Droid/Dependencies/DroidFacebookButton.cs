@@ -14,7 +14,7 @@ namespace Kadevjo.Droid.Dependencies
 {
 	public class DroidFacebookButton : IFacebookButton
 	{
-		private Action<FacebookEvent> _callback;
+		private Action<FacebookToken> _callback;
 
 		public DroidFacebookButton()
 		{
@@ -38,7 +38,7 @@ namespace Kadevjo.Droid.Dependencies
 
 						if (_callback != null)
 						{
-							FacebookEvent data = new FacebookEvent()
+							FacebookToken data = new FacebookToken()
 							{
 								AccessToken = result.AccessToken.Token,
 								TokenExpiration = expiration,
@@ -51,13 +51,13 @@ namespace Kadevjo.Droid.Dependencies
 					HandleCancel = () =>
 					{
 						if (_callback != null)
-							_callback(default(FacebookEvent));
+							_callback(default(FacebookToken));
 
 					},
 					HandleError = (error) =>
 					{
 						if (_callback != null)
-							_callback(default(FacebookEvent));
+							_callback(default(FacebookToken));
 
 					}
 				});
@@ -65,14 +65,14 @@ namespace Kadevjo.Droid.Dependencies
 
 		#region IFacebook implementation
 
-		public void LoginWithReadPermissions(string[] permissions, Action<FacebookEvent> callback)
+		public void LoginWithReadPermissions(string[] permissions, Action<FacebookToken> callback)
 		{
 			_callback = callback;
 			LoginManager.Instance.SetLoginBehavior(LoginBehavior.NativeWithFallback);
 			LoginManager.Instance.LogInWithReadPermissions(MainActivity.Instance, permissions);
 		}
 
-		public void LoginWithWritePermissions(string[] permissions, Action<FacebookEvent> callback)
+		public void LoginWithWritePermissions(string[] permissions, Action<FacebookToken> callback)
 		{
 			_callback = callback;
 			LoginManager.Instance.SetLoginBehavior(LoginBehavior.NativeWithFallback);

@@ -6,6 +6,7 @@ namespace Exchange.Services.FirebaseServices
 	{
 		string FirebaseBasePath { get; }
 		string ApiKey { get; }
+		string FirebaseBaseRefreshTokenPath { get; }
 	}
 }
 

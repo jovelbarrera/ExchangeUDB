@@ -47,11 +47,11 @@ namespace Kadevjo.Core.Services
 
 		protected abstract string Resource { get; }
 
-		protected abstract Task<R> Execute<R>(string resource, IQuery query = null);
+		protected abstract Task<GenericResponse<R>> Execute<R>(string resource, IQuery query = null);
 
 		protected abstract Task<bool> Execute<B>(string resource, HttpMethod method, B body = default(B));
 
-		protected abstract Task<GenericResponse<R>> Execute<R, B>(string resource, HttpMethod method, B body = default(B));
+		protected abstract Task<GenericResponse<R>> Execute<R, B>(string resource, HttpMethod method, B body = default(B), IQuery query = null);
 
 		#region IService implementation
 
@@ -61,7 +61,7 @@ namespace Kadevjo.Core.Services
 			return response;
 		}
 
-		public virtual async Task<T> Read(string id)
+		public virtual async Task<GenericResponse<T>> Read(string id)
 		{
 			string resource = Resource + "/" + id;
 
@@ -69,57 +69,59 @@ namespace Kadevjo.Core.Services
 			{
 				if (!CrossConnectivity.Current.IsConnected)
 				{
-					var response = await cacheManager.GetObject(id);
-					return response;
+					T response = await cacheManager.GetObject(id);
+					return new GenericResponse<T> { Model = response };
 				}
 				else
 				{
-					var response = await Execute<T>(resource);
-					await cacheManager.InsertObject(response);
+					GenericResponse<T> response = await Execute<T>(resource);
+					await cacheManager.InsertObject(response.Model);
 					return response;
 				}
 			}
 			else
 			{
-				return await Execute<T>(resource);
+				GenericResponse<T> response = await Execute<T>(resource);
+				return response;
 			}
 		}
 
-		public virtual async Task<List<T>> ReadAll()
+		public virtual async Task<GenericResponse<List<T>>> ReadAll()
 		{
 			if (isCacheable)
 			{
 				if (!CrossConnectivity.Current.IsConnected)
 				{
-					var response = await cacheManager.GetObjects();
-					return response;
+					List<T> response = await cacheManager.GetObjects();
+					return new GenericResponse<List<T>> { Model = response };
 				}
 				else
 				{
-					var response = await Execute<List<T>>(Resource);
-					await cacheManager.InsertObjects(response);
+					GenericResponse<List<T>> response = await Execute<List<T>>(Resource);
+					await cacheManager.InsertObjects(response.Model);
 					return response;
 				}
 			}
 			else
 			{
-				return await Execute<List<T>>(Resource);
+				GenericResponse<List<T>> response = await Execute<List<T>>(Resource);
+				return response;
 			}
 		}
 
-		public virtual async Task<List<T>> ReadAll(IQuery query)
+		public virtual async Task<GenericResponse<List<T>>> ReadAll(IQuery query)
 		{
 			if (isCacheable)
 			{
 				if (!CrossConnectivity.Current.IsConnected)
 				{
-					var response = await cacheManager.GetObjects();
-					return response;
+					List<T> response = await cacheManager.GetObjects();
+					return new GenericResponse<List<T>> { Model = response };
 				}
 				else
 				{
-					var response = await Execute<List<T>>(Resource, query);
-					await cacheManager.InsertObjects(response);
+					GenericResponse<List<T>> response = await Execute<List<T>>(Resource, query);
+					await cacheManager.InsertObjects(response.Model);
 					return response;
 				}
 			}

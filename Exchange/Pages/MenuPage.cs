@@ -21,13 +21,13 @@ namespace Exchange.Pages
 
 		private async Task LoadData()
 		{
-			IUser user = await UserManager.Instance.GetCurrentUser();
+			IUser user = await CustomUserManager.Instance.GetCurrentUser();
 			if (user != null)
 			{
 				if (!string.IsNullOrEmpty(user.ProfilePicture))
 					_pictureImage.Source = user.ProfilePicture;
 				_nameLabel.Text = user.DisplayName;
-				_universityLabel.Text = user.University;
+				_universityLabel.Text = user.Data["University"].ToString();
 				_pointsLabel.Text = "100";
 			}
 		}

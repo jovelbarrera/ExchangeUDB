@@ -43,11 +43,10 @@ namespace Exchange.Configs
 				ProfilePicture = "https://avatars1.githubusercontent.com/u/7088590?v=3&s=460",
 				DisplayName = "Roberto Ernesto Jovel",
 				Email = "roberto@email.com",
-				University = "Universidad Don Bosco",
-				Career = "Ingeniería en Ciencias de la Computación",
-				About = "Love coding",
-				//ProfilePicture = "http://portal.stickntrack.com/images/profile.jpg",
 			};
+			user.Data["University"] = "Universidad Don Bosco";
+			user.Data["Career"] = "Ingeniería en Ciencias de la Computación";
+			user.Data["About"] = "Love coding";
 			return user;
 		}
 

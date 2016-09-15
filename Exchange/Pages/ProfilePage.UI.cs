@@ -39,6 +39,7 @@ namespace Exchange.Pages
 				Aspect = Aspect.AspectFill,
 				Source = "ic_picture_placeholder.png",
 				WidthRequest = 80,
+				HeightRequest = 80,
 				VerticalOptions = LayoutOptions.Start,
 				HorizontalOptions = LayoutOptions.Start,
 			};

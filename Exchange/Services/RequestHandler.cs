@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Exchange.Exceptions;
 using Plugin.Connectivity;
 
 namespace Exchange.Services
@@ -55,9 +56,5 @@ namespace Exchange.Services
 	//{
 	//	System.Diagnostics.Debug.WriteLine("**********************" + ex.Message);
 	//}
-	public class NoInternetException : Exception
-	{
-		public override string Message { get { return "No internet connection"; } }
-	}
 }
 

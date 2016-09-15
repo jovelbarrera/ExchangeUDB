@@ -9,6 +9,7 @@ using Exchange.Dependencies;
 using Exchange.Models;
 using Exchange.Services;
 using Exchange.Services.FirebaseServices;
+using Kadevjo.Core.Models;
 using Plugin.Connectivity;
 using Xamarin.Forms;
 
@@ -53,9 +54,9 @@ namespace Exchange.Pages
 			{
 				if (ask.User != null)
 				{
-					User user = await UserService.Instance.Get(ask.User.ObjectId);
-					if (user != null)
-						ask.User = user;
+					GenericResponse<User> response = await FirebaseUserService.Instance.Read(ask.User.ObjectId);
+					if (response != null)
+						ask.User = response.Model;
 				}
 			}
 			_askListViewItemsSource.Clear();
@@ -97,9 +98,9 @@ namespace Exchange.Pages
 
 			foreach (var ask in askList)
 			{
-				User user = await UserService.Instance.Get(ask.User.ObjectId);
-				if (user != null)
-					ask.User = user;
+				GenericResponse<User> response = await FirebaseUserService.Instance.Read(ask.User.ObjectId);
+				if (response != null)
+					ask.User = response.Model;
 			}
 			foreach (var ask in askList)
 			{

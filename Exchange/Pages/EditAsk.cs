@@ -28,7 +28,6 @@ namespace Exchange.Pages
 		{
 			Init(ask).ConfigureAwait(false);
 			InitializeComponents();
-			LoadData();
 		}
 
 		private async Task Init(Ask ask)
@@ -36,7 +35,8 @@ namespace Exchange.Pages
 			_isNewAsk = ask == null;
 			_ask = ask ?? new Ask();
 			_tags = new List<string>();
-			_currentUser = await UserManager.Instance.GetCurrentUser();
+			_currentUser = await CustomUserManager.Instance.GetCurrentUser();
+			LoadData();
 		}
 
 		private void LoadData()

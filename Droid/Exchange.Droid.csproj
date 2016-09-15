@@ -288,6 +288,14 @@
     <AndroidResource Include="Resources\drawable-mdpi\ic_action_done.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\ic_action_done.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_action_done.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_password.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_password.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_password.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_password.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_email_white.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_email_white.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_email_white.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_email_white.png" />
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="facebookandroid">

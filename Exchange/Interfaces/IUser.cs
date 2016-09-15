@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace Exchange.Interfaces
 {
 	public interface IUser : IModel
@@ -8,10 +10,8 @@ namespace Exchange.Interfaces
 		string FirstName { get; set; }
 		string LastName { get; set; }
 		string Email { get; set; }
-		string University { get; set; }
-		string Career { get; set; }
-		string About { get; set; }
 		string ProfilePicture { get; set; }
+		Dictionary<string, object> Data { get; set; }
 	}
 }
 

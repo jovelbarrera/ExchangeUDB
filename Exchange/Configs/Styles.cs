@@ -38,6 +38,15 @@ namespace Exchange.Configs
 			}
 		};
 
+		public static readonly Style Link = new Style(typeof(Label))
+		{
+			Setters = {
+				new Setter { Property = Label.TextColorProperty, Value = Colors.Title },
+				new Setter { Property = Label.FontSizeProperty, Value = Device.GetNamedSize (NamedSize.Small, typeof(Label)) },
+				new Setter { Property = Label.VerticalTextAlignmentProperty, Value = TextAlignment.Center },
+			}
+		};
+
 		public static readonly Style Verbosa = new Style(typeof(Label))
 		{
 			Setters = {
@@ -73,7 +82,7 @@ namespace Exchange.Configs
 			Setters = {
 				new Setter { Property = Button.TextColorProperty, Value = Color.White },
 				new Setter { Property = Button.BackgroundColorProperty, Value = Colors.Primary },
-				new Setter { Property = Button.FontSizeProperty, Value = Device.GetNamedSize (NamedSize.Medium, typeof(Label)) },
+				new Setter { Property = Button.FontSizeProperty, Value = Device.GetNamedSize (NamedSize.Small, typeof(Label)) },
 			}
 		};
 

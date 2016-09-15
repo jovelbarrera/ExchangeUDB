@@ -31,5 +31,13 @@ namespace Exchange.Configs
                 return "https://exchange-fcbe1.firebaseio.com/";
             }
         }
+
+		public string FirebaseBaseRefreshTokenPath
+		{
+			get
+			{
+				return "https://securetoken.googleapis.com/v1/";
+			}
+		}
     }
 }

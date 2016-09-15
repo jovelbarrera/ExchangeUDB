@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Exchange.Configs;
 using Exchange.Helpers;
 using Exchange.Models;
 using Exchange.Services.FirebaseServices;
@@ -15,7 +14,7 @@ namespace Exchange.Services
 
 		protected override string Token { get { return Settings.FirebaseUserToken; } }
 
-		protected override string BaseUrl { get { return Configs.FirebaseAccess.Instance.FirebaseBasePath; } }
+		protected override string BaseUrl { get { return FirebaseAccess.Instance.FirebaseBasePath; } }
 
 		protected override Dictionary<string, string> Headers { get { return new Dictionary<string, string>(); } }
 
@@ -33,7 +32,8 @@ namespace Exchange.Services
 			query.OrderBy("$key");
 			query.LimitToFirst(limit);
 			query.StartAt(readFromId);
-			return await base.ReadAll(query);
+			GenericResponse<List<Ask>> response = await base.ReadAll(query);
+			return response.Model;
 		}
 
 		public async Task<List<Ask>> GetPrev(int limit, string readFromId)
@@ -42,7 +42,8 @@ namespace Exchange.Services
 			query.OrderBy("$key");
 			query.LimitToFirst(limit);
 			query.EndAt(readFromId);
-			return await base.ReadAll(query);
+			GenericResponse<List<Ask>> response = await base.ReadAll(query);
+			return response.Model;
 		}
 
 		public async Task<List<Ask>> GetLatest(int limit = 10)
@@ -50,12 +51,14 @@ namespace Exchange.Services
 			var query = new FirebaseQuery();
 			query.OrderBy("$key");
 			query.LimitToLast(limit);
-			return await base.ReadAll(query);
+			GenericResponse<List<Ask>> response = await base.ReadAll(query);
+			return response.Model;
 		}
 
 		public async Task<Ask> Get(string objectId)
 		{
-			return await base.Read(objectId);
+			GenericResponse<Ask> result = await base.Read(objectId);
+			return result.Model;
 		}
 
 		public async Task<bool> Update(Ask model)
@@ -92,13 +95,17 @@ namespace Exchange.Services
 				var query = new FirebaseQuery();
 				query.OrderBy("$key");
 				query.LimitToLast(10);
-				comments = await base.ReadAll<Comment>(resource, query);
+				GenericResponse<List<Comment>> result = await base.ReadAll<Comment>(resource, query);
+				comments = result.Model;
 				if (comments != null && comments.Count > 0)
 				{
 					foreach (var comment in comments)
 					{
 						if (comment.User != null && !string.IsNullOrEmpty(comment.User.ObjectId))
-							comment.User = await UserService.Instance.Get(comment.User.ObjectId);
+						{
+							GenericResponse<User> userResult = await FirebaseUserService.Instance.Read(comment.User.ObjectId);
+							comment.User = userResult.Model;
+						}
 					}
 				}
 			}

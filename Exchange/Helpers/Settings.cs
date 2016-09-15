@@ -24,8 +24,10 @@ namespace Exchange.Helpers
 		private const string FirebaseUserTokenKey = "firebase_user_token_key";
 		private static readonly string FirebaseUserTokenDefault = string.Empty;
 
-		#endregion
+		private const string FirebaseUserRefreshTokenKey = "firebase_user_refresh_token_key";
+		private static readonly string FirebaseUserRefreshTokenDefault = string.Empty;
 
+		#endregion
 
 		public static string FirebaseUserToken
 		{
@@ -39,5 +41,16 @@ namespace Exchange.Helpers
 			}
 		}
 
+		public static string FirebaseUserRefreshToken
+		{
+			get
+			{
+				return AppSettings.GetValueOrDefault<string>(FirebaseUserRefreshTokenKey, FirebaseUserRefreshTokenDefault);
+			}
+			set
+			{
+				AppSettings.AddOrUpdateValue<string>(FirebaseUserRefreshTokenKey, value);
+			}
+		}
 	}
 }

@@ -6,11 +6,21 @@ namespace Exchange.UIHelper
 {
 	public class UIHelper
 	{
+		//public NavigationPage Navigation()
+		//{
+		//	NavigationPage
+		//}
+
 		public static BoxView Separator()
+		{
+			return Separator(Styles.Colors.Placeholder);
+		}
+
+		public static BoxView Separator(Color color)
 		{
 			return new BoxView
 			{
-				BackgroundColor = Styles.Colors.Placeholder,
+				BackgroundColor = color,
 				HeightRequest = 1,
 				VerticalOptions = LayoutOptions.End
 			};
@@ -18,9 +28,14 @@ namespace Exchange.UIHelper
 
 		public static StackLayout FormGroup(string imageSource, View view)
 		{
+			return FormGroup(imageSource, view, Styles.Colors.Placeholder);
+		}
+
+		public static StackLayout FormGroup(string imageSource, View view, Color baseLineColor)
+		{
 			var layout = new StackLayout
 			{
-				Spacing = 10,
+				Spacing = 0,
 			};
 			var goupLayout = new StackLayout
 			{
@@ -42,7 +57,7 @@ namespace Exchange.UIHelper
 			layout.Children.Add(new StackLayout
 			{
 				Padding = new Thickness(30, 0, 0, 0),
-				Children = { UIHelper.Separator() }
+				Children = { UIHelper.Separator(baseLineColor) }
 			});
 			return layout;
 		}

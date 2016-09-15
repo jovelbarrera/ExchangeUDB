@@ -35,9 +35,9 @@ namespace Exchange.Pages
 				_pointsLabel.Text = "100";
 				_nameLabel.Text = _user.DisplayName;
 				_emailLabel.Text = _user.Email;
-				_universityLabel.Text = _user.University;
-				_careerLabel.Text = _user.Career;
-				_aboutMeLabel.Text = _user.About;
+				_universityLabel.Text = (string)_user.GetData("University");
+				_careerLabel.Text = (string)_user.GetData("Career");
+				_aboutMeLabel.Text = (string)_user.GetData("About");
 
 				Content = _mainLayout;
 			}

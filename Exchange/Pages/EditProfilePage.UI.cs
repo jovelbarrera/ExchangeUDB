@@ -9,11 +9,11 @@ namespace Exchange.Pages
 	{
 		private ScrollView _mainLayout;
 		private CustomImage _pictureImage;
-		private CustomEntry _nameLabel;
-		private CustomEntry _emailLabel;
-		private CustomEntry _universityLabel;
-		private CustomEntry _careerLabel;
-		private CustomEditor _aboutMeLabel;
+		private CustomEntry _nameEntry;
+		private CustomEntry _emailEntry;
+		private CustomEntry _universityEntry;
+		private CustomEntry _careerEntry;
+		private CustomEditor _aboutMeEditor;
 		private Label _charactersLeftLabel;
 
 		public void InitializeComponents()
@@ -37,6 +37,7 @@ namespace Exchange.Pages
 				Aspect = Aspect.AspectFill,
 				Source = "ic_picture_placeholder.png",
 				WidthRequest = 100,
+				HeightRequest = 100,
 				VerticalOptions = LayoutOptions.Center,
 				HorizontalOptions = LayoutOptions.Center,
 			};
@@ -69,41 +70,41 @@ namespace Exchange.Pages
 			};
 			scrollLayout.Children.Add(infoLayout);
 
-			_nameLabel = new CustomEntry
+			_nameEntry = new CustomEntry
 			{
 				Style = Styles.NormalEntry,
 				Placeholder = "Nombre",
 			};
-			infoLayout.Children.Add(UIHelper.UIHelper.FormGroup("ic_user.png", _nameLabel));
+			infoLayout.Children.Add(UIHelper.UIHelper.FormGroup("ic_user.png", _nameEntry));
 
-			_emailLabel = new CustomEntry
+			_emailEntry = new CustomEntry
 			{
 				Style = Styles.NormalEntry,
 				Placeholder = "Email",
 			};
-			infoLayout.Children.Add(UIHelper.UIHelper.FormGroup("ic_mail.png", _emailLabel));
+			infoLayout.Children.Add(UIHelper.UIHelper.FormGroup("ic_mail.png", _emailEntry));
 
-			_universityLabel = new CustomEntry
+			_universityEntry = new CustomEntry
 			{
 				Style = Styles.NormalEntry,
 				Placeholder = "Universidad",
 			};
-			infoLayout.Children.Add(UIHelper.UIHelper.FormGroup("ic_university.png", _universityLabel));
+			infoLayout.Children.Add(UIHelper.UIHelper.FormGroup("ic_university.png", _universityEntry));
 
-			_careerLabel = new CustomEntry
+			_careerEntry = new CustomEntry
 			{
 				Style = Styles.NormalEntry,
 				Placeholder = "Carrera",
 			};
-			infoLayout.Children.Add(UIHelper.UIHelper.FormGroup(string.Empty, _careerLabel));
+			infoLayout.Children.Add(UIHelper.UIHelper.FormGroup(string.Empty, _careerEntry));
 
-			_aboutMeLabel = new CustomEditor
+			_aboutMeEditor = new CustomEditor
 			{
 				Style = Styles.NormalEditor,
 				Text = "Sobre mi",
 				HeightRequest = 100,
 			};
-			infoLayout.Children.Add(UIHelper.UIHelper.FormGroup(string.Empty, _aboutMeLabel));
+			infoLayout.Children.Add(UIHelper.UIHelper.FormGroup(string.Empty, _aboutMeEditor));
 			_charactersLeftLabel = new Label
 			{
 				Text = "100@",
@@ -116,6 +117,14 @@ namespace Exchange.Pages
 			{
 				Content = scrollLayout,
 			};
+
+			var doneToolbarItem = new ToolbarItem
+			{
+				Text = "Hecho",
+				Icon = "ic_action_done.png",
+			};
+			ToolbarItems.Add(doneToolbarItem);
+			doneToolbarItem.Clicked+= DoneToolbarItem_Clicked;
 		}
 	}
 }

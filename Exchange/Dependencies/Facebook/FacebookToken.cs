@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace Exchange.Dependencies.Facebook
 {
-	public class FacebookEvent
+	public class FacebookToken
 	{
 		public string UserId { get; set; }
 		public string AccessToken { get; set; }

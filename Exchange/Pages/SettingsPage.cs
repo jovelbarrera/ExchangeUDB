@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Exchange.Configs;
+using Exchange.Interfaces;
 using Exchange.Models;
+using Exchange.Services;
 using Xamarin.Forms;
 
 namespace Exchange.Pages
@@ -10,11 +13,15 @@ namespace Exchange.Pages
 		public SettingsPage()
 		{
 			Title = "Configuración";
+			LoadSettings().ConfigureAwait(false);
+		}
 
-			User currentUser = Dummy.User();
-			Children.Add(new ProfilePage(currentUser));
+		private async Task LoadSettings()
+		{
+			IUser currentUser = await CustomUserManager.Instance.GetCurrentUser();
+			Children.Add(new ProfilePage(new User(currentUser)));
 			Children.Add(new ActivityPage());
-			Children.Add(new EditProfilePage(currentUser));
+			Children.Add(new EditProfilePage(new User(currentUser)));
 		}
 	}
 }

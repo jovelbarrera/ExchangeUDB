@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Exchange.Configs;
-using Exchange.ContentViews;
-using Exchange.Models;
-using Exchange.Services;
-using Exchange.Services.FirebaseServices;
-using Plugin.Connectivity;
-using Xamarin.Forms;
-using Exchange.Interfaces;
 using BranchXamarinSDK;
 using Exchange.BranchService;
+using Exchange.Configs;
+using Exchange.Interfaces;
+using Exchange.Models;
+using Exchange.Pages.Base;
+using Exchange.Services;
+using Xamarin.Forms;
 
 namespace Exchange.Pages
 {
@@ -41,7 +39,7 @@ namespace Exchange.Pages
 		protected override async Task LoadData(string id)
 		{
 			await base.LoadData(id);
-			_currentUser = await UserManager.Instance.GetCurrentUser();
+			_currentUser = await CustomUserManager.Instance.GetCurrentUser();
 			Content = _mainLayout;
 			_titleLabel.Text = Model.Title;
 			if (Model.User != null)
