@@ -12,7 +12,7 @@ namespace Exchange.ViewCells
 		public ResultsTemplateSelector()
 		{
 			_askDataTemplate = new DataTemplate(typeof(AskViewCell));
-			_exchangeDataTemplate = new DataTemplate(typeof(ExchangeViewCell));
+			_exchangeDataTemplate = new DataTemplate(typeof(VideoViewCell));
 		}
 
 		protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
@@ -24,7 +24,7 @@ namespace Exchange.ViewCells
 
 			if (itemType == typeof(Ask))
 				return _askDataTemplate;
-			else if (itemType == typeof(Models.Exchange))
+			else if (itemType == typeof(Models.Video))
 				return _exchangeDataTemplate;
 			else
 				return null;

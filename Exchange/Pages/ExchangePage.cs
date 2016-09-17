@@ -7,6 +7,7 @@ using Exchange.Dependencies;
 using Exchange.Models;
 using Plugin.Connectivity;
 using Xamarin.Forms;
+using Exchange.Services;
 
 namespace Exchange.Pages
 {
@@ -29,7 +30,7 @@ namespace Exchange.Pages
 
 		private async Task LoadData()
 		{
-			List<Models.Exchange> itemSource = new List<Models.Exchange>();//await Dummy.ExchangeList();
+            List<Models.Video> itemSource = await VideoService.Instance.GetLatest();//Dummy.ExchangeList();
 			_exchangeListView.ItemsSource = itemSource;
 			if (itemSource != null && itemSource.Count > 0)
 				Content = _mainLayout;
@@ -43,7 +44,7 @@ namespace Exchange.Pages
 				return;
 
 			var list = (ListView)sender;
-			var exchange = (Exchange.Models.Exchange)e.SelectedItem;
+			var exchange = (Exchange.Models.Video)e.SelectedItem;
 			Navigation.PushAsync(new ExchangeDetailPage(exchange));
 			list.SelectedItem = null;
 		}

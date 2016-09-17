@@ -4,7 +4,7 @@ using Realms;
 
 namespace Exchange.Models
 {
-	public class Comment : RealmObject, IModel
+	public class Comment : IModel
 	{
 		public DateTimeOffset CreatedAt { get; set; }
 		public string ObjectId { get; set; }

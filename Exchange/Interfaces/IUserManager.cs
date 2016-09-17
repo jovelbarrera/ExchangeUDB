@@ -12,6 +12,7 @@ namespace Exchange.Interfaces
 		Task<T> GetCurrentUser();
 		Task SetCurrentUser(T user);
 		Task UpdateCurrentUser(T user);
-	}
+        Task<bool> DeleteCurrentUser();
+    }
 }
 

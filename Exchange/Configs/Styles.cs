@@ -83,10 +83,11 @@ namespace Exchange.Configs
 				new Setter { Property = Button.TextColorProperty, Value = Color.White },
 				new Setter { Property = Button.BackgroundColorProperty, Value = Colors.Primary },
 				new Setter { Property = Button.FontSizeProperty, Value = Device.GetNamedSize (NamedSize.Small, typeof(Label)) },
-			}
+                new Setter { Property = Button.FontAttributesProperty, Value = FontAttributes.Bold },
+            }
 		};
 
-		public static readonly Style LikeButton = new Style(typeof(Button))
+		public static readonly Style DisabledButton = new Style(typeof(Button))
 		{
 			Setters = {
 				new Setter { Property = Button.TextColorProperty, Value = Colors.NormalText },
@@ -95,6 +96,28 @@ namespace Exchange.Configs
 				new Setter { Property = Button.FontAttributesProperty, Value = FontAttributes.Bold },
 			}
 		};
-	}
+
+        public static readonly Style LikedButton = new Style(typeof(Button))
+        {
+            Setters = {
+                new Setter { Property = Button.TextProperty, Value = "1" },
+                new Setter { Property = Button.TextColorProperty, Value = Color.White },
+                new Setter { Property = Button.BackgroundColorProperty, Value = Color.FromHex("#CF3333") },
+                new Setter { Property = Button.FontSizeProperty, Value = Device.GetNamedSize (NamedSize.Small, typeof(Label)) },
+                new Setter { Property = Button.FontAttributesProperty, Value = FontAttributes.Bold },
+            }
+        };
+
+        public static readonly Style NonLikedButton = new Style(typeof(Button))
+        {
+            Setters = {
+                new Setter { Property = Button.TextProperty, Value = "+1" },
+                new Setter { Property = Button.TextColorProperty, Value = Colors.NormalText },
+                new Setter { Property = Button.BackgroundColorProperty, Value = Color.FromHex("#EFEFEF") },
+                new Setter { Property = Button.FontSizeProperty, Value = Device.GetNamedSize (NamedSize.Small, typeof(Label)) },
+                new Setter { Property = Button.FontAttributesProperty, Value = FontAttributes.Bold },
+            }
+        };
+    }
 }
 

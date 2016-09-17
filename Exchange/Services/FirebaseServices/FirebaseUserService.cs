@@ -13,7 +13,7 @@ namespace Exchange.Services.FirebaseServices
 	{
 		protected override string Resource { get { return "User"; } }
 
-		protected override string Token { get { return Settings.FirebaseUserToken; } }
+		protected override FirebaseToken Token { get { return CurrentFirebaseToken(); } }
 
 		protected override string BaseUrl { get { return FirebaseAccess.Instance.FirebaseBasePath; } }
 

@@ -20,7 +20,7 @@ namespace Exchange.Pages
 
 			_exchangeListView = new ListView
 			{
-				ItemTemplate = new DataTemplate(typeof(ExchangeViewCell)),
+				ItemTemplate = new DataTemplate(typeof(VideoViewCell)),
 				HasUnevenRows = true,
 				SeparatorVisibility = SeparatorVisibility.None,
 			};

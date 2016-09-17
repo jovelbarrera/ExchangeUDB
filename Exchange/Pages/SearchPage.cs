@@ -28,7 +28,7 @@ namespace Exchange.Pages
 		private async Task LoadData()
 		{
 			Content = new LoadingContent();
-			List<Models.Exchange> exchangesResults = await Dummy.ExchangeList();
+			List<Models.Video> exchangesResults = await Dummy.ExchangeList();
 			List<Ask> askResults = await Dummy.AskList();
 			int resultNumber = exchangesResults.Count + askResults.Count;
 			if (exchangesResults == null || askResults == null || resultNumber <= 0)

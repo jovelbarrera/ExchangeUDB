@@ -12,159 +12,183 @@ using Kadevjo.Core.Services;
 
 namespace Exchange.Services.FirebaseServices
 {
-	public abstract class FirebaseDatabaseService<S, T> : FlurlService<S, T>
-		where S : IService<T>
-		where T : Model, IModel, new()
-	{
-		protected abstract string Token { get; }
+    public abstract class FirebaseDatabaseService<S, T> : FlurlService<S, T>
+        where S : IService<T>
+        where T : Model, IModel, new()
+    {
+        protected abstract FirebaseToken Token { get; }
 
-		#region CRUD methods
+        #region CRUD methods
 
-		#region Read Methods
-		public override async Task<GenericResponse<T>> Read(string id)
-		{
-			return await Read<T>(id, Resource);
-		}
+        #region Read Methods
+        public override async Task<GenericResponse<T>> Read(string id)
+        {
+            return await Read<T>(id, Resource);
+        }
 
-		public override async Task<GenericResponse<List<T>>> ReadAll()
-		{
-			return await ReadAll<T>(Resource, null);
-		}
+        public override async Task<GenericResponse<List<T>>> ReadAll()
+        {
+            return await ReadAll<T>(Resource, null);
+        }
 
-		public override Task<GenericResponse<List<T>>> ReadAll(IQuery query)
-		{
-			return ReadAll<T>(Resource, query);
-		}
+        public override Task<GenericResponse<List<T>>> ReadAll(IQuery query)
+        {
+            return ReadAll<T>(Resource, query);
+        }
 
-		protected async Task<GenericResponse<I>> Read<I>(string objectId, string childResource)
-			where I : IModel, new()
-		{
-			if (string.IsNullOrEmpty(objectId))
-				return new GenericResponse<I>();
+        protected async Task<GenericResponse<I>> Read<I>(string objectId, string childResource)
+            where I : IModel, new()
+        {
+            if (string.IsNullOrEmpty(objectId))
+                return new GenericResponse<I>();
 
-			var query = new FirebaseQuery();
-			query.Auth(Token);
-			string resource = string.Format("{0}/{1}.json", childResource, objectId, Token);
-			GenericResponse<I> result = await EnsureAuthorizedRequest(Execute<I>(resource, query));
-			if (result == null || result.Model == null)
-				return new GenericResponse<I>();
-			result.Model.ObjectId = objectId;
-			return result;
-		}
+            FirebaseToken validToken = await ValidFirebaseToken(Token);
+            var query = new FirebaseQuery();
+            query.Auth(validToken.AccessToken);
+            string resource = string.Format("{0}/{1}.json", childResource, objectId);
+            GenericResponse<I> result = await Execute<I>(resource, query);
+            if (result == null || result.Model == null)
+                return new GenericResponse<I>();
+            result.Model.ObjectId = objectId;
+            return result;
+        }
 
-		protected async Task<GenericResponse<List<I>>> ReadAll<I>(string childResource, IQuery query = null)
-			where I : IModel
-		{
-			var firebaseQuery = (FirebaseQuery)query;
-			firebaseQuery.Auth(Token);
+        protected async Task<GenericResponse<List<I>>> ReadAll<I>(string childResource, IQuery query = null)
+            where I : IModel
+        {
+            FirebaseToken validToken = await ValidFirebaseToken(Token);
 
-			string resource = string.Format("{0}.json", childResource);
+            var firebaseQuery = (FirebaseQuery)query;
+            firebaseQuery.Auth(validToken.AccessToken);
 
-			GenericResponse<Dictionary<string, I>> result = await EnsureAuthorizedRequest(Execute<Dictionary<string, I>>(resource, firebaseQuery));
-			if (result == null || result.Model == null)
-				return new GenericResponse<List<I>>();
-			foreach (var r in result.Model)
-				r.Value.ObjectId = r.Key;
+            string resource = string.Format("{0}.json", childResource);
 
-			List<I> items = result.Model.Values.ToList();
-			return new GenericResponse<List<I>> { Status = result.Status, Model = items };
-		}
+            GenericResponse<Dictionary<string, I>> result = await Execute<Dictionary<string, I>>(resource, firebaseQuery);
+            if (result == null || result.Model == null)
+                return new GenericResponse<List<I>>();
+            foreach (var r in result.Model)
+                r.Value.ObjectId = r.Key;
 
-		#endregion
+            List<I> items = result.Model.Values.ToList();
+            return new GenericResponse<List<I>> { Status = result.Status, Model = items };
+        }
 
-		#region Create Methods
-		public override async Task<GenericResponse<U>> Create<U>(T entity)
-		{
-			return await Create<U, T>(entity, Resource);
-		}
+        #endregion
 
-		protected async Task<GenericResponse<U>> Create<U, I>(I model, string childResource)
-			where I : IModel
-		{
-			if (model == null)
-				return null;
+        #region Create Methods
+        public override async Task<GenericResponse<U>> Create<U>(T entity)
+        {
+            return await Create<U, T>(entity, Resource);
+        }
 
-			DateTime currentTime = await TimeService.Instance.Now();
-			model.CreatedAt = currentTime;
-			model.UpdatedAt = currentTime;
+        protected async Task<GenericResponse<U>> Create<U, I>(I model, string childResource)
+            where I : IModel
+        {
+            if (model == null)
+                return null;
 
-			string resource = string.Format("{0}.json?auth={1}", childResource, Token);
-			GenericResponse<U> result = await EnsureAuthorizedRequest(Execute<U, I>(resource, HttpMethod.Post, model));
-			return result;
-		}
+            DateTime currentTime = await TimeService.Instance.Now();
+            model.CreatedAt = currentTime;
+            model.UpdatedAt = currentTime;
 
-		#endregion
+            FirebaseToken validToken = await ValidFirebaseToken(Token);
+            var query = new FirebaseQuery();
+            query.Auth(validToken.AccessToken);
+            string resource = string.Format("{0}.json", childResource);
+            GenericResponse<U> result = await Execute<U, I>(resource, HttpMethod.Post, model,query);
+            return result;
+        }
 
-		#region Update Methods
-		public override async Task<GenericResponse<U>> Update<U>(T entity)
-		{
-			return await Update<U, T>(entity, Resource);
-		}
+        #endregion
 
-		protected async Task<GenericResponse<U>> Update<U, I>(I model, string childResource)
-			where I : IModel, new()
-		{
-			if (model == null || string.IsNullOrEmpty(model.ObjectId))
-				return null;
+        #region Update Methods
+        public override async Task<GenericResponse<U>> Update<U>(T entity)
+        {
+            return await Update<U, T>(entity, Resource);
+        }
 
-			GenericResponse<I> readResult = await Read<I>(model.ObjectId, childResource);
-			I registeredModel = readResult.Model;
+        protected async Task<GenericResponse<U>> Update<U, I>(I model, string childResource)
+            where I : IModel, new()
+        {
+            if (model == null || string.IsNullOrEmpty(model.ObjectId))
+                return null;
 
-			DateTime currentTime = await TimeService.Instance.Now();
-			if (registeredModel == null || string.IsNullOrEmpty(registeredModel.ObjectId))
-				model.UpdatedAt = currentTime;
-			else
-				model.CreatedAt = registeredModel.CreatedAt;
-			model.UpdatedAt = currentTime;
+            GenericResponse<I> readResult = await Read<I>(model.ObjectId, childResource);
+            I registeredModel = readResult.Model;
 
-			string resource = string.Format("{0}/{1}.json?auth={2}", childResource, model.ObjectId, Token);
-			GenericResponse<U> result = await EnsureAuthorizedRequest(Execute<U, I>(resource, new HttpMethod("PATCH"), model));
-			return result;
-		}
-		#endregion
+            DateTime currentTime = await TimeService.Instance.Now();
+            if (registeredModel == null || string.IsNullOrEmpty(registeredModel.ObjectId))
+                model.UpdatedAt = currentTime;
+            else
+                model.CreatedAt = registeredModel.CreatedAt;
+            model.UpdatedAt = currentTime;
 
-		#region Delete Methods
+            FirebaseToken validToken = await ValidFirebaseToken(Token);
+            string resource = string.Format("{0}/{1}.json?auth={2}", childResource, model.ObjectId, validToken.AccessToken);
+            GenericResponse<U> result = await Execute<U, I>(resource, new HttpMethod("PATCH"), model);
+            return result;
+        }
+        #endregion
 
-		public override async Task<GenericResponse<U>> Delete<U>(string id)
-		{
-			return await Delete<U, T>(id, Resource);
-		}
+        #region Delete Methods
 
-		protected async Task<GenericResponse<U>> Delete<U, I>(string objectId, string childResource)
-			where I : IModel
-		{
-			if (string.IsNullOrEmpty(objectId))
-				return null;
+        public override async Task<GenericResponse<U>> Delete<U>(string id)
+        {
+            return await Delete<U, T>(id, Resource);
+        }
 
-			string resource = string.Format("{0}/{1}.json?auth={2}", childResource, objectId, Token);
-			GenericResponse<U> result = await EnsureAuthorizedRequest(Execute<U, I>(resource, HttpMethod.Delete));
-			return result;
-		}
-		#endregion
+        protected async Task<GenericResponse<U>> Delete<U, I>(string objectId, string childResource)
+            where I : IModel
+        {
+            if (string.IsNullOrEmpty(objectId))
+                return null;
 
-		#endregion
+            FirebaseToken validToken = await ValidFirebaseToken(Token);
+            string resource = string.Format("{0}/{1}.json?auth={2}", childResource, objectId, validToken.AccessToken);
+            GenericResponse<U> result = await Execute<U, I>(resource, HttpMethod.Delete);
+            return result;
+        }
+        #endregion
 
-		#region Token methods
-		private async Task<GenericResponse<U>> EnsureAuthorizedRequest<U>(Task<GenericResponse<U>> service)
-		{
-			if (service == null)
-				return default(GenericResponse<U>);
-			await service.ConfigureAwait(false);
-			GenericResponse<U> response = service.Result;
-			if (response.Status == null || response.Status.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-			{
-				FirebaseToken token = await FirebaseRefreshTokenService.Instance.Refresh(FirebaseAccess.Instance.ApiKey, Settings.FirebaseUserRefreshToken);
-				if (token != null)
-				{
-					Settings.FirebaseUserRefreshToken = token.RefreshToken;
-					Settings.FirebaseUserToken = token.AccessToken;
+        #endregion
 
-					await service.ConfigureAwait(false);
-					response = service.Result;
-				}
-			}
-			return response;
-		}
-		#endregion
-	}
+        #region Token methods
+        private async Task<FirebaseToken> ValidFirebaseToken(FirebaseToken token)
+        {
+            FirebaseToken firebaseToken = token;
+            DateTime now = await TimeService.Instance.Now();
+            if (now > token.Expiration)
+            {
+                try
+                {
+                    firebaseToken = await FirebaseRefreshTokenService.Instance.Refresh(FirebaseAccess.Instance.ApiKey, Settings.FirebaseUserRefreshToken);
+                    if (token != null)
+                    {
+                        Settings.FirebaseUserToken = firebaseToken.AccessToken;
+                        Settings.FirebaseUserRefreshToken = firebaseToken.RefreshToken;
+                        DateTime expiration = (await TimeService.Instance.Now()).AddSeconds(int.Parse(firebaseToken.ExpiresIn) - 60);
+                        Settings.FirebaseUserTokenExpiration = expiration;
+                        firebaseToken.Expiration = expiration;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var error = ex.Message;
+                }
+            }
+
+            return firebaseToken;
+        }
+
+        protected FirebaseToken CurrentFirebaseToken()
+        {
+            return new FirebaseToken
+            {
+                AccessToken = Settings.FirebaseUserToken,
+                RefreshToken = Settings.FirebaseUserRefreshToken,
+                Expiration = Settings.FirebaseUserTokenExpiration,
+            };
+        }
+        #endregion
+    }
 }

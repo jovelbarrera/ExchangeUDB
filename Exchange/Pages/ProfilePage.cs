@@ -33,8 +33,9 @@ namespace Exchange.Pages
 				if (!string.IsNullOrEmpty(_user.ProfilePicture))
 					_pictureImage.Source = _user.ProfilePicture;
 				_pointsLabel.Text = "100";
-				_nameLabel.Text = _user.DisplayName;
-				_emailLabel.Text = _user.Email;
+				_firstnameLabel.Text = _user.FirstName;
+                _lastnameLabel.Text = _user.LastName;
+                _emailLabel.Text = _user.Email;
 				_universityLabel.Text = (string)_user.GetData("University");
 				_careerLabel.Text = (string)_user.GetData("Career");
 				_aboutMeLabel.Text = (string)_user.GetData("About");

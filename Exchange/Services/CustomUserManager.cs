@@ -8,6 +8,8 @@ using Exchange.Services.AuthService;
 using Exchange.Services.FirebaseServices;
 using Kadevjo.Core.Dependencies;
 using Kadevjo.Core.Models;
+using Exchange.Helpers;
+using System;
 
 namespace Exchange.Services
 {
@@ -43,6 +45,14 @@ namespace Exchange.Services
 			GenericResponse<Dictionary<string, string>> response = await FirebaseUserService.Instance.Update<Dictionary<string, string>>(new User(user));
 			await base.UpdateCurrentUser(new PersistentUser(user));
 		}
-	}
+
+        public override Task<bool> DeleteCurrentUser()
+        {
+            Settings.FirebaseUserToken = string.Empty;
+            Settings.FirebaseUserRefreshToken = string.Empty;
+            Settings.FirebaseUserTokenExpiration = default(DateTime);
+            return base.DeleteCurrentUser();
+        }
+    }
 }
 

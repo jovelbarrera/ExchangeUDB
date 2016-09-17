@@ -80,7 +80,6 @@ namespace Exchange.Pages
 				HasUnevenRows = true,
 				SeparatorVisibility = SeparatorVisibility.None,
 				ItemTemplate = new DataTemplate(typeof(CommentViewCell)),
-				ItemsSource = Comments,
 			};
 			_repliesListview.ItemSelected += RepliesListview_ItemSelected;
 			_repliesLayout.Children.Add(_repliesListview);

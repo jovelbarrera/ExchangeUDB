@@ -25,7 +25,7 @@ namespace Exchange.Pages
 
 		public async Task PushPage(Page page)
 		{
-			Detail.Navigation.PushAsync(page);
+			await Detail.Navigation.PushAsync(page);
 		}
 
 		public void PopPage()

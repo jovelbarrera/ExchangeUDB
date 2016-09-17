@@ -33,6 +33,7 @@ namespace Exchange.Pages
 		protected override void Init()
 		{
 			Comments = new ObservableCollection<Comment>();
+            _repliesListview.ItemsSource = Comments;
 			base.Init();
 		}
 
@@ -120,8 +121,8 @@ namespace Exchange.Pages
 
 		private async void PostComment(Comment comment)
 		{
-			if (comment != null)
-			{
+            if (comment != null && !string.IsNullOrEmpty(comment.Message))
+            {
 				_repliesLayout.Children.Insert(0, Loading);
 
 				await AskService.Instance.Reply(Model, comment);

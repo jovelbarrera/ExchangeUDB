@@ -1,6 +1,7 @@
 // Helpers/Settings.cs
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
+using System;
 
 namespace Exchange.Helpers
 {
@@ -27,9 +28,12 @@ namespace Exchange.Helpers
 		private const string FirebaseUserRefreshTokenKey = "firebase_user_refresh_token_key";
 		private static readonly string FirebaseUserRefreshTokenDefault = string.Empty;
 
-		#endregion
+        private const string FirebaseUserTokenExpirationKey = "firebase_user_token_expiration";
+        private static readonly DateTime FirebaseUserTokenExpirationDefault = default(DateTime);
 
-		public static string FirebaseUserToken
+        #endregion
+
+        public static string FirebaseUserToken
 		{
 			get
 			{
@@ -52,5 +56,17 @@ namespace Exchange.Helpers
 				AppSettings.AddOrUpdateValue<string>(FirebaseUserRefreshTokenKey, value);
 			}
 		}
-	}
+
+        public static DateTime FirebaseUserTokenExpiration
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault<DateTime>(FirebaseUserTokenExpirationKey, FirebaseUserTokenExpirationDefault);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue<DateTime>(FirebaseUserTokenExpirationKey, value);
+            }
+        }
+    }
 }
