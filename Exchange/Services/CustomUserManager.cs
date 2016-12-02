@@ -46,13 +46,13 @@ namespace Exchange.Services
 			await base.UpdateCurrentUser(new PersistentUser(user));
 		}
 
-        public override Task<bool> DeleteCurrentUser()
-        {
-            Settings.FirebaseUserToken = string.Empty;
-            Settings.FirebaseUserRefreshToken = string.Empty;
-            Settings.FirebaseUserTokenExpiration = default(DateTime);
-            return base.DeleteCurrentUser();
-        }
-    }
+		public override Task<bool> DeleteCurrentUser()
+		{
+			Settings.FirebaseUserToken = string.Empty;
+			Settings.FirebaseUserRefreshToken = string.Empty;
+			Settings.FirebaseUserTokenExpiration = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
+			return base.DeleteCurrentUser();
+		}
+	}
 }
 

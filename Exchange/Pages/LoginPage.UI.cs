@@ -38,7 +38,7 @@ namespace Exchange.Pages
 			_fbButton = new Button
 			{
 				TextColor = Color.White,
-				BackgroundColor = Configs.Styles.Colors.FB,
+				BackgroundColor = Styles.Colors.FB,
 				Text = "INICIAR SESIÓN CON FACEBOOK",
 				Image = "ic_facebook.png",
 				HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -88,11 +88,11 @@ namespace Exchange.Pages
 			_registerLabel.AddTapHandler(RegisterButton_Clicked);
 			bottomLayout.Children.Add(_registerLabel);
 
-			var mainLayout = new ScrollView
+			MainLayout = new ScrollView
 			{
 				Content = contentLayout,
 			};
-			Content = mainLayout;
+			//Content = mainLayout;
 		}
 	}
 }

@@ -102,7 +102,7 @@ namespace Exchange.Configs
             Setters = {
                 new Setter { Property = Button.TextProperty, Value = "1" },
                 new Setter { Property = Button.TextColorProperty, Value = Color.White },
-                new Setter { Property = Button.BackgroundColorProperty, Value = Color.FromHex("#CF3333bhcfzdff   vbsx  c t") },
+				new Setter { Property = Button.BackgroundColorProperty, Value = Colors.Secondary },
                 new Setter { Property = Button.FontSizeProperty, Value = Device.GetNamedSize (NamedSize.Small, typeof(Label)) },
                 new Setter { Property = Button.FontAttributesProperty, Value = FontAttributes.Bold },
             }

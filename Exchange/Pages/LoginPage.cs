@@ -10,11 +10,6 @@ namespace Exchange.Pages
 {
 	public partial class LoginPage : BasePage
 	{
-		public LoginPage()
-		{
-			InitializeComponents();
-		}
-
 		private void LoginButton_Clicked(object sender, EventArgs e)
 		{
 			DisableControls();

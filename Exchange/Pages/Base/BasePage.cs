@@ -11,13 +11,15 @@ namespace Exchange.Pages.Base
 	public abstract class BasePage : ContentPage
 	{
 		protected Layout MainLayout;
-		protected readonly LoadingContent Loading = new LoadingContent();
-		protected readonly NotFoundContent NotFound = new NotFoundContent();
+		protected readonly LoadingContent Loading;
+		protected readonly NotFoundContent NotFound;
 
 		protected abstract void InitializeComponents();
 
 		public BasePage()
 		{
+			Loading = new LoadingContent();
+			NotFound = new NotFoundContent();
 			InitializeComponents();
 			Content = MainLayout;
 		}

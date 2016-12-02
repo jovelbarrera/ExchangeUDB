@@ -34,13 +34,18 @@
     <Compile Include="Controls\CustomTableView.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Pages\LoginPage.cs" />
-    <Compile Include="Pages\LoginPage.UI.cs" />
+    <Compile Include="Pages\LoginPage.cs">
+    </Compile>
+    <Compile Include="Pages\LoginPage.UI.cs">
+      <DependentUpon>LoginPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Configs\Styles.cs" />
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\AskPage.cs" />
-    <Compile Include="Pages\AskPage.UI.cs" />
+    <Compile Include="Pages\AskPage.UI.cs">
+      <DependentUpon>AskPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ViewsCell\AskViewCell.cs" />
     <Compile Include="Pages\UIHelper\UIHelper.cs" />
     <Compile Include="Models\Ask.cs" />
@@ -49,41 +54,61 @@
     <Compile Include="Controls\CustomImage.cs" />
     <Compile Include="Configs\Tools.cs" />
     <Compile Include="Pages\ExchangePage.cs" />
-    <Compile Include="Pages\ExchangePage.UI.cs" />
+    <Compile Include="Pages\ExchangePage.UI.cs">
+      <DependentUpon>ExchangePage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ViewsCell\VideoViewCell.cs" />
     <Compile Include="Models\Video.cs" />
     <Compile Include="Pages\MenuPage.cs" />
-    <Compile Include="Pages\MenuPage.UI.cs" />
+    <Compile Include="Pages\MenuPage.UI.cs">
+      <DependentUpon>MenuPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\EditAsk.cs" />
-    <Compile Include="Pages\EditAsk.UI.cs" />
+    <Compile Include="Pages\EditAsk.UI.cs">
+      <DependentUpon>EditAsk.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CustomEditor.cs" />
     <Compile Include="Controls\CustomEntry.cs" />
     <Compile Include="Pages\AskDetailPage.cs" />
-    <Compile Include="Pages\AskDetailPage.UI.cs" />
+    <Compile Include="Pages\AskDetailPage.UI.cs">
+      <DependentUpon>AskDetailPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Configs\Dummy.cs" />
     <Compile Include="Pages\ExchangeDetailPage.cs" />
-    <Compile Include="Pages\ExchangeDetailPage.UI.cs" />
+    <Compile Include="Pages\ExchangeDetailPage.UI.cs">
+      <DependentUpon>ExchangeDetailPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Pages\ViewsCell\CommentViewCell.cs" />
     <Compile Include="Pages\ViewsCell\NotificationViewCell.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Pages\NotificationPage.cs" />
-    <Compile Include="Pages\NotificationPage.UI.cs" />
+    <Compile Include="Pages\NotificationPage.UI.cs">
+      <DependentUpon>NotificationPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ContentViews\LoadingContent.cs" />
     <Compile Include="Pages\ContentViews\NotFoundContent.cs" />
     <Compile Include="Pages\ContentViews\ConnectionFailContent.cs" />
     <Compile Include="Pages\ContentViews\EmptyContent.cs" />
     <Compile Include="Pages\SearchPage.cs" />
-    <Compile Include="Pages\SearchPage.UI.cs" />
+    <Compile Include="Pages\SearchPage.UI.cs">
+      <DependentUpon>SearchPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ViewsCell\ResultsTemplateSelector.cs" />
     <Compile Include="Controls\CustomSearchBar.cs" />
     <Compile Include="Pages\SettingsPage.cs" />
     <Compile Include="Pages\ProfilePage.cs" />
-    <Compile Include="Pages\ProfilePage.UI.cs" />
+    <Compile Include="Pages\ProfilePage.UI.cs">
+      <DependentUpon>ProfilePage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\EditProfilePage.cs" />
-    <Compile Include="Pages\EditProfilePage.UI.cs" />
+    <Compile Include="Pages\EditProfilePage.UI.cs">
+      <DependentUpon>EditProfilePage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ActivityPage.cs" />
-    <Compile Include="Pages\ActivityPage.UI.cs" />
+    <Compile Include="Pages\ActivityPage.UI.cs">
+      <DependentUpon>ActivityPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ViewsCell\ActivityViewCell.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Services\VideoService.cs" />
@@ -109,7 +134,9 @@
     <Compile Include="Services\FirebaseServices\FirebaseUserService.cs" />
     <Compile Include="Services\TimeService.cs" />
     <Compile Include="Pages\EditComment.cs" />
-    <Compile Include="Pages\EditComment.UI.cs" />
+    <Compile Include="Pages\EditComment.UI.cs">
+      <DependentUpon>EditComment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\RequestHandler.cs" />
     <Compile Include="Services\FirebaseServices\IFirebaseAccess.cs" />
     <Compile Include="Services\FirebaseServices\FirebaseQuery.cs" />
@@ -126,14 +153,50 @@
     <Compile Include="Services\AuthService\UserManager.cs" />
     <Compile Include="Services\CustomUserManager.cs" />
     <Compile Include="Pages\EmailLoginPage.cs" />
-    <Compile Include="Pages\EmailLoginPage.UI.cs" />
+    <Compile Include="Pages\EmailLoginPage.UI.cs">
+      <DependentUpon>EmailLoginPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SignupPage.cs" />
-    <Compile Include="Pages\SignupPage.UI.cs" />
+    <Compile Include="Pages\SignupPage.UI.cs">
+      <DependentUpon>SignupPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Base\BaseDetailPage.cs" />
     <Compile Include="Pages\Base\BasePage.cs" />
     <Compile Include="Exceptions\NoInternetException.cs" />
     <Compile Include="Services\FirebaseServices\FirebaseRefreshTokenService.cs" />
     <Compile Include="Services\FirebaseServices\FirebaseToken.cs" />
+    <Compile Include="Controls\VideoPlayer\IVideoPlayerAsset.cs" />
+    <Compile Include="Controls\VideoPlayer\IVideoPlayerListener.cs" />
+    <Compile Include="Controls\VideoPlayer\PlaybackStates.cs" />
+    <Compile Include="Controls\VideoPlayer\PlayerOrientation.cs" />
+    <Compile Include="Controls\VideoPlayer\StreamingFormat.cs" />
+    <Compile Include="Controls\VideoPlayer\VideoPlayer.cs" />
+    <Compile Include="Pages\VideoPlayerPage.cs" />
+    <Compile Include="Pages\VideoPlayerPage.UI.cs">
+      <DependentUpon>VideoPlayerPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dependencies\IPlatform.cs" />
+    <Compile Include="Controls\Fab.cs" />
+    <Compile Include="Models\Question.cs" />
+    <Compile Include="Pages\QuestionPage.cs" />
+    <Compile Include="Pages\QuestionPage.UI.cs">
+      <DependentUpon>QuestionPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\QuestionService.cs" />
+    <Compile Include="Pages\ViewsCell\QuestionViewCell.cs" />
+    <Compile Include="Services\UserService.cs" />
+    <Compile Include="Models\AppUser.cs" />
+    <Compile Include="Services\AnswerService.cs" />
+    <Compile Include="Models\Answer.cs" />
+    <Compile Include="Pages\QuestionDetailPage.cs" />
+    <Compile Include="Pages\QuestionDetailPage.UI.cs">
+      <DependentUpon>QuestionDetailPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ViewsCell\AnswerViewCell.cs" />
+    <Compile Include="Pages\EditQuestion.cs" />
+    <Compile Include="Pages\EditQuestion.UI.cs">
+      <DependentUpon>EditQuestion.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Flurl, Version=2.2.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -228,6 +291,9 @@
     <Reference Include="Branch-Xamarin-SDK">
       <HintPath>..\packages\Branch-Xamarin-Linking-SDK.2.1.6\lib\portable-net45+win+wp80+MonoTouch10+MonoAndroid10+xamarinmac20+xamarinios10\Branch-Xamarin-SDK.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Mobile">
+      <HintPath>..\packages\Microsoft.Azure.Mobile.Client.3.0.3\lib\portable-win+net45+wp8+wpa81+monotouch+monoandroid\Microsoft.WindowsAzure.Mobile.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -242,4 +308,5 @@
   <Import Project="..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Import Project="..\packages\Fody.1.29.4\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\portable-net+sl+win+wpa+wp\Fody.targets')" />
   <Import Project="..\packages\Realm.0.76.1\build\Realm.targets" Condition="Exists('..\packages\Realm.0.76.1\build\Realm.targets')" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
 </Project>

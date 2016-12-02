@@ -10,68 +10,70 @@ using Firebase.Xamarin.Auth;
 
 namespace Exchange.Services.FirebaseServices
 {
-    public class FirebaseAuthProvider : AuthProvider<FirebaseAuthProvider, PersistentUser>
-    {
-        private Firebase.Xamarin.Auth.FirebaseAuthProvider authProvider;
+	public class FirebaseAuthProvider : AuthProvider<FirebaseAuthProvider, PersistentUser>
+	{
+		private Firebase.Xamarin.Auth.FirebaseAuthProvider authProvider;
 
-        private IUserManager<PersistentUser> UserManager
-        {
-            get
-            {
-                return CustomUserManager.Instance;
-            }
-        }
+		private IUserManager<PersistentUser> UserManager
+		{
+			get
+			{
+				return CustomUserManager.Instance;
+			}
+		}
 
-        public FirebaseAuthProvider()
-        {
-            var config = new FirebaseConfig(FirebaseAccess.Instance.ApiKey);
-            authProvider = new Firebase.Xamarin.Auth.FirebaseAuthProvider(config);
-        }
+		public FirebaseAuthProvider()
+		{
+			var config = new FirebaseConfig(FirebaseAccess.Instance.ApiKey);
+			authProvider = new Firebase.Xamarin.Auth.FirebaseAuthProvider(config);
+		}
 
-        public override async Task LogIn(string email, string password)
-        {
-            FirebaseAuthLink auth = await authProvider.SignInWithEmailAndPasswordAsync(email, password);
-            await RegisteredUser(auth);
-        }
+		public override async Task LogIn(string email, string password)
+		{
+			FirebaseAuthLink auth = await authProvider.SignInWithEmailAndPasswordAsync(email, password);
+			await RegisteredUser(auth);
+		}
 
-        public override async Task LogIn(FacebookToken facebookToken)
-        {
-            FirebaseAuthLink auth = await authProvider.SignInWithOAuthAsync(FirebaseAuthType.Facebook, facebookToken.AccessToken);
-            await RegisteredUser(auth);
-        }
+		public override async Task LogIn(FacebookToken facebookToken)
+		{
+			FirebaseAuthLink auth = await authProvider.SignInWithOAuthAsync(FirebaseAuthType.Facebook, facebookToken.AccessToken);
+			await RegisteredUser(auth);
+		}
 
-        public override async Task SignUp(string email, string password)
-        {
-            FirebaseAuthLink auth = await authProvider.CreateUserWithEmailAndPasswordAsync(email, password);
-            await RegisteredUser(auth);
-        }
+		public override async Task SignUp(string email, string password)
+		{
+			FirebaseAuthLink auth = await authProvider.CreateUserWithEmailAndPasswordAsync(email, password);
+			await RegisteredUser(auth);
+		}
 
-        public override async Task ResetPassword(string email)
-        {
-            await authProvider.SendPasswordResetEmailAsync(email);
-        }
+		public override async Task ResetPassword(string email)
+		{
+			await authProvider.SendPasswordResetEmailAsync(email);
+		}
 
-        public async Task<PersistentUser> RegisteredUser(FirebaseAuthLink auth)
-        {
-            if (auth == null || auth.User == null)
-                throw new Exception("Unexpected Error");
+		public async Task<PersistentUser> RegisteredUser(FirebaseAuthLink auth)
+		{
+			if (auth == null || auth.User == null)
+				throw new Exception("Unexpected Error");
 
-            var user = new PersistentUser();
-            user.DisplayName = auth.User.DisplayName;
-            user.Email = auth.User.Email;
-            user.ObjectId = auth.User.LocalId;
-            user.FirstName = auth.User.FirstName;
-            user.LastName = auth.User.LastName;
-            user.ProfilePicture = auth.User.PhotoUrl;
+			var user = new PersistentUser();
+			user.DisplayName = auth.User.DisplayName;
+			user.Email = auth.User.Email;
+			user.ObjectId = auth.User.LocalId;
+			user.FirstName = auth.User.FirstName;
+			user.LastName = auth.User.LastName;
+			user.ProfilePicture = auth.User.PhotoUrl;
 
-            Settings.FirebaseUserToken = auth.FirebaseToken;
-            Settings.FirebaseUserRefreshToken = auth.RefreshToken;
-            Settings.FirebaseUserTokenExpiration = (await TimeService.Instance.Now()).AddSeconds(auth.ExpiresIn - 60);
+			Settings.FirebaseUserToken = auth.FirebaseToken;
+			Settings.FirebaseUserRefreshToken = auth.RefreshToken;
+			DateTime expirationTime = await TimeService.Instance.Now();
+			DateTime secureExpirationTime = expirationTime.AddSeconds(auth.ExpiresIn - 60);
+			Settings.FirebaseUserTokenExpiration = DateTime.SpecifyKind(secureExpirationTime, DateTimeKind.Utc);
 
-            await UserManager.SetCurrentUser(user);
+			await UserManager.SetCurrentUser(user);
 
-            return user;
-        }
-    }
+			return user;
+		}
+	}
 }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BranchXamarinSDK;
+using Exchange.ContentViews;
 using Exchange.Interfaces;
 using Exchange.Pages;
 using Exchange.Services;
@@ -9,51 +10,52 @@ using Xamarin.Forms;
 
 namespace Exchange
 {
-    public class App : Application, IBranchSessionInterface
-    {
-        public App()
-        {
-            MainPage = new NavigationPage(new LoginPage());
-            //InitializeApp().ConfigureAwait(false);
-        }
+	public class App : Application, IBranchSessionInterface
+	{
+		public App()
+		{
+			MainPage = new NavigationPage(new QuestionPage());
+			//MainPage = new ContentPage { Content = new LoadingContent() };
+			//InitializeApp().ConfigureAwait(false);
+		}
 
-        private async Task InitializeApp()
-        {
-            IUser currentUser = await CustomUserManager.Instance.GetCurrentUser();
-            if (currentUser == null || string.IsNullOrEmpty(currentUser.ObjectId))
-                MainPage = new NavigationPage(new LoginPage());
-            else
-                MainPage = new MainPage();
-        }
+		private async Task InitializeApp()
+		{
+			IUser currentUser = await CustomUserManager.Instance.GetCurrentUser();
+			if (currentUser == null || string.IsNullOrEmpty(currentUser.ObjectId))
+				MainPage = new NavigationPage(new LoginPage());
+			else
+				MainPage = new MainPage();
+		}
 
-        protected override void OnStart()
-        {
-            // Handle when your app starts
-        }
+		protected override void OnStart()
+		{
+			// Handle when your app starts
+		}
 
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
+		protected override void OnSleep()
+		{
+			// Handle when your app sleeps
+		}
 
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
-        }
+		protected override void OnResume()
+		{
+			// Handle when your app resumes
+		}
 
-        #region IBranchSessionInterface implementation
+		#region IBranchSessionInterface implementation
 
-        public void InitSessionComplete(Dictionary<string, object> data)
-        {
-            // Do something with the referring link data...
-        }
+		public void InitSessionComplete(Dictionary<string, object> data)
+		{
+			// Do something with the referring link data...
+		}
 
-        public void SessionRequestError(BranchError error)
-        {
-            // Handle the error case here
-        }
+		public void SessionRequestError(BranchError error)
+		{
+			// Handle the error case here
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }
 

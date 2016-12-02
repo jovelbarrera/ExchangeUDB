@@ -44,7 +44,7 @@ namespace Exchange.Pages
 				return;
 
 			var list = (ListView)sender;
-			var exchange = (Exchange.Models.Video)e.SelectedItem;
+			var exchange = (Video)e.SelectedItem;
 			Navigation.PushAsync(new ExchangeDetailPage(exchange));
 			list.SelectedItem = null;
 		}

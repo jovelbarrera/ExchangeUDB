@@ -41,6 +41,26 @@ namespace Exchange.Pages
 		{
 			await base.LoadData(id);
 			_currentUser = await CustomUserManager.Instance.GetCurrentUser();
+
+			if (_currentUser.ObjectId == Model.User.ObjectId)
+			{
+				var editToolbarItem = new ToolbarItem
+				{
+					Text = "Editar",
+					Icon = "ic_edit.png"
+				};
+				editToolbarItem.Clicked += EditToolbarItem_Clicked;
+				ToolbarItems.Add(editToolbarItem);
+
+				var deleteToolbarItem = new ToolbarItem
+				{
+					Text = "Eliminar",
+					Icon = "ic_delete.png"
+				};
+				deleteToolbarItem.Clicked += DeleteToolbarItem_Clicked;
+				ToolbarItems.Add(deleteToolbarItem);
+			}
+
 			Content = _mainLayout;
 			_titleLabel.Text = Model.Title;
 			if (Model.User != null)

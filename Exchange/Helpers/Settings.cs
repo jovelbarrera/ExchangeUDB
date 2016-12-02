@@ -29,7 +29,7 @@ namespace Exchange.Helpers
 		private static readonly string FirebaseUserRefreshTokenDefault = string.Empty;
 
         private const string FirebaseUserTokenExpirationKey = "firebase_user_token_expiration";
-        private static readonly DateTime FirebaseUserTokenExpirationDefault = default(DateTime);
+		private static readonly DateTime FirebaseUserTokenExpirationDefault = DateTime.MinValue;
 
         #endregion
 
@@ -61,11 +61,11 @@ namespace Exchange.Helpers
         {
             get
             {
-                return AppSettings.GetValueOrDefault<DateTime>(FirebaseUserTokenExpirationKey, FirebaseUserTokenExpirationDefault);
+                return AppSettings.GetValueOrDefault(FirebaseUserTokenExpirationKey, FirebaseUserTokenExpirationDefault);
             }
             set
             {
-                AppSettings.AddOrUpdateValue<DateTime>(FirebaseUserTokenExpirationKey, value);
+                AppSettings.AddOrUpdateValue(FirebaseUserTokenExpirationKey, value);
             }
         }
     }

@@ -87,50 +87,12 @@ namespace Exchange.Pages
 
 			#endregion
 
-			//#region reply
-			//var replyLayout = new StackLayout
-			//{
-			//	Padding = new Thickness(5),
-			//	BackgroundColor = Styles.Colors.Primary,
-			//	VerticalOptions = LayoutOptions.EndAndExpand,
-			//};
-			//_mainLayout.Children.Add(replyLayout);
-
-			//var replyContainerLayout = new StackLayout
-			//{
-			//	Orientation = StackOrientation.Horizontal,
-			//	//BackgroundColor = Color.White,
-			//	Spacing = 15,
-			//};
-			//replyLayout.Children.Add(replyContainerLayout);
-			//var photoButton = new Image
-			//{
-			//	Source = "ic_photo.png",
-			//};
-			//replyContainerLayout.Children.Add(photoButton);
-			//_replyEditor = new CustomEditor
-			//{
-			//	Style = Styles.NormalEditor,
-			//	HorizontalOptions = LayoutOptions.FillAndExpand,
-			//	HeightRequest = 40,
-			//};
-			//replyContainerLayout.Children.Add(_replyEditor);
-			//var sendButton = new CustomImage
-			//{
-			//	//Style = Styles.ActiveButton,
-			//	Source = "ic_send.png",
-			//	//BackgroundColor = Styles.Colors.Primary,
-			//	//Text = "Enviar",
-			//};
-			//replyContainerLayout.Children.Add(sendButton);
-
-			//#endregion
-
 			#region ToolbarItems
 
 			var shareToolbarItem = new ToolbarItem
 			{
 				Text = "Compartir",
+				Icon="ic_share.png"
 			};
 			shareToolbarItem.Clicked += ShareToolbarItem_Clicked;
 			ToolbarItems.Add(shareToolbarItem);
@@ -138,23 +100,10 @@ namespace Exchange.Pages
 			var replyToolbarItem = new ToolbarItem
 			{
 				Text = "Responder",
+				Icon = "ic_ask_white.png"
 			};
 			replyToolbarItem.Clicked += ReplyToolbarItem_Clicked;
 			ToolbarItems.Add(replyToolbarItem);
-
-			var editToolbarItem = new ToolbarItem
-			{
-				Text = "Editar",
-			};
-			editToolbarItem.Clicked += EditToolbarItem_Clicked;
-			ToolbarItems.Add(editToolbarItem);
-
-			var deleteToolbarItem = new ToolbarItem
-			{
-				Text = "Eliminar",
-			};
-			deleteToolbarItem.Clicked += DeleteToolbarItem_Clicked;
-			ToolbarItems.Add(deleteToolbarItem);
 
 			#endregion
 		}

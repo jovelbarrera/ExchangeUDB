@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Exchange.Droid</RootNamespace>
     <AssemblyName>Exchange.Droid</AssemblyName>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -142,6 +142,18 @@
     <Reference Include="Branch-Xamarin-SDK">
       <HintPath>..\packages\Branch-Xamarin-Linking-SDK.2.1.6\lib\MonoAndroid\Branch-Xamarin-SDK.dll</HintPath>
     </Reference>
+    <Reference Include="ExoPlayer">
+      <HintPath>ExoPlayer.dll</HintPath>
+    </Reference>
+    <Reference Include="Refractored.FloatingActionButton">
+      <HintPath>..\packages\Refractored.FloatingActionButton.1.3.0\lib\MonoAndroid10\Refractored.FloatingActionButton.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Mobile">
+      <HintPath>..\packages\Microsoft.Azure.Mobile.Client.3.0.3\lib\monoandroid\Microsoft.WindowsAzure.Mobile.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.Ext">
+      <HintPath>..\packages\Microsoft.Azure.Mobile.Client.3.0.3\lib\monoandroid\Microsoft.WindowsAzure.Mobile.Ext.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Exchange\Exchange.csproj">
@@ -161,8 +173,16 @@
     <Compile Include="Renderes\DroidCustomEntry.cs" />
     <Compile Include="Renderes\DroidCustomSearchBar.cs" />
     <Compile Include="Dependencies\DroidFacebookButton.cs" />
-    <Compile Include="Dependencies\RealmService.cs" />
     <Compile Include="Helpers\Settings.cs" />
+    <Compile Include="Exoplayer\Aes128DataSource.cs" />
+    <Compile Include="Exoplayer\EventLogger.cs" />
+    <Compile Include="Exoplayer\ExoPlayer.cs" />
+    <Compile Include="Exoplayer\HlsRendererBuilder.cs" />
+    <Compile Include="Renderes\DroidVideoPlayer\DroidVideoPlayer.Exoplayer.cs" />
+    <Compile Include="Renderes\DroidVideoPlayer\DroidVideoPlayer.Renderer.cs" />
+    <Compile Include="Renderes\DroidVideoPlayer\DroidVideoPlayer.UI.cs" />
+    <Compile Include="Dependencies\DroidPlatform.cs" />
+    <Compile Include="Renderes\DroidFab.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -297,10 +317,28 @@
     <AndroidResource Include="Resources\drawable-mdpi\ic_email_white.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\ic_email_white.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_email_white.png" />
+    <AndroidResource Include="Resources\layout\VideoPlayer.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_delete.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_edit.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_share.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_delete.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_edit.png" />
+    <AndroidResource Include="Resources\drawable-mdpi\ic_share.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_delete.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_edit.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_share.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_delete.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_edit.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_share.png" />
+    <AndroidResource Include="Resources\layout\Fab.xml" />
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="facebookandroid">
       <Version>4.9.0.0</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="fab">
+      <Version>1.3.0</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>
@@ -312,4 +350,5 @@
   <Import Project="..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
   <Import Project="..\packages\Realm.0.76.1\build\Realm.targets" Condition="Exists('..\packages\Realm.0.76.1\build\Realm.targets')" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
 </Project>
